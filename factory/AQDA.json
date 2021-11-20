@@ -1,0 +1,9 @@
+{
+	"name": "AQDA",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "0a77a178-5f48-483e-8bb0-155628ad211d",
+		"tenantId": "76e7755e-f32c-4dee-bbdf-b62a0e74a648"
+	}
+}
