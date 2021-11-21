@@ -21,7 +21,7 @@
 					"name": "Seleccionar1"
 				}
 			],
-			"script": "source(output(\n\t\tid as long,\n\t\tdate as date,\n\t\tduration as integer,\n\t\tworker_id as long,\n\t\tsector_id as long,\n\t\ttask_id as long,\n\t\tcreated_at as timestamp,\n\t\tupdated_at as timestamp,\n\t\tuser_id as long\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> source1\nsource1 select(mapColumn(\n\t\tid,\n\t\tdate,\n\t\tduration,\n\t\tworker_id,\n\t\tsector_id,\n\t\ttask_id,\n\t\tcreated_at,\n\t\tupdated_at,\n\t\tuser_id\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Seleccionar1"
+			"script": "source(output(\n\t\tid as long,\n\t\tsector_id as long,\n\t\tn_bins as integer,\n\t\tkilos as integer,\n\t\tmarket as string,\n\t\ttruck_plate as string,\n\t\tcreated_at as timestamp,\n\t\tupdated_at as timestamp,\n\t\tdate as date,\n\t\tvariety_id as long,\n\t\tinternal_guide as integer,\n\t\tbuyer_id as long\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> source1\nsource1 select(mapColumn(\n\t\tsector_id,\n\t\tn_bins,\n\t\tkilos,\n\t\tmarket,\n\t\ttruck_plate,\n\t\tdate,\n\t\tvariety_id,\n\t\tinternal_guide,\n\t\tbuyer_id\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Seleccionar1"
 		}
 	}
 }
