@@ -1,5 +1,5 @@
 {
-	"name": "AppAssignments",
+	"name": "AppHarvest",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzurePostgreSql1",
