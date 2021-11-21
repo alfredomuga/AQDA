@@ -1,6 +1,9 @@
 {
 	"name": "FlowProcesos",
 	"properties": {
+		"folder": {
+			"name": "PROCESOS"
+		},
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [],
