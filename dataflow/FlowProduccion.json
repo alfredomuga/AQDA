@@ -22,9 +22,12 @@
 				},
 				{
 					"name": "Columnaderivada1"
+				},
+				{
+					"name": "Modificarfila1"
 				}
 			],
-			"script": "source(output(\n\t\tid as long,\n\t\tsector_id as long,\n\t\tn_bins as integer,\n\t\tkilos as integer,\n\t\tmarket as string,\n\t\ttruck_plate as string,\n\t\tcreated_at as timestamp,\n\t\tupdated_at as timestamp,\n\t\tdate as date,\n\t\tvariety_id as long,\n\t\tinternal_guide as integer,\n\t\tbuyer_id as long\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> source1\nsource1 select(mapColumn(\n\t\tsector_id,\n\t\tn_bins,\n\t\tkilos,\n\t\tmarket,\n\t\ttruck_plate,\n\t\tdate,\n\t\tvariety_id,\n\t\tinternal_guide,\n\t\tbuyer_id\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Seleccionar1\nSeleccionar1 derive(idFecha = year(date)*10000+month(date)*100+dayOfMonth(date)) ~> Columnaderivada1"
+			"script": "source(output(\n\t\tid as long,\n\t\tsector_id as long,\n\t\tn_bins as integer,\n\t\tkilos as integer,\n\t\tmarket as string,\n\t\ttruck_plate as string,\n\t\tcreated_at as timestamp,\n\t\tupdated_at as timestamp,\n\t\tdate as date,\n\t\tvariety_id as long,\n\t\tinternal_guide as integer,\n\t\tbuyer_id as long\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> source1\nsource1 select(mapColumn(\n\t\tsector_id,\n\t\tn_bins,\n\t\tkilos,\n\t\tmarket,\n\t\ttruck_plate,\n\t\tdate,\n\t\tvariety_id,\n\t\tinternal_guide,\n\t\tbuyer_id\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Seleccionar1\nSeleccionar1 derive(idFecha = year(date)*10000+month(date)*100+dayOfMonth(date)) ~> Columnaderivada1\nColumnaderivada1 alterRow() ~> Modificarfila1"
 		}
 	}
 }
