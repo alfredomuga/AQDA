@@ -1,0 +1,95 @@
+{
+	"name": "DLWeather",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "DataLake"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Weather.csv",
+				"fileSystem": "rpa"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Date",
+				"type": "String"
+			},
+			{
+				"name": "Temperature (�C)",
+				"type": "String"
+			},
+			{
+				"name": "Minimum Temperature (�C)",
+				"type": "String"
+			},
+			{
+				"name": "Maximum Temperature (�C)",
+				"type": "String"
+			},
+			{
+				"name": "Relative Humidity (%)",
+				"type": "String"
+			},
+			{
+				"name": "Minimum Relative Humidity (%)",
+				"type": "String"
+			},
+			{
+				"name": "Maximum Relative Humidity (%)",
+				"type": "String"
+			},
+			{
+				"name": "Rainfall (mm)",
+				"type": "String"
+			},
+			{
+				"name": "Accumulated Daily Rainfall (mm)",
+				"type": "String"
+			},
+			{
+				"name": "ET0 (mm)",
+				"type": "String"
+			},
+			{
+				"name": "Accumulated ET0 (mm)",
+				"type": "String"
+			},
+			{
+				"name": "Atmospheric Pressure (Pa)",
+				"type": "String"
+			},
+			{
+				"name": "Minimum Atmospheric Pressure (Pa)",
+				"type": "String"
+			},
+			{
+				"name": "Maximum Atmospheric Pressure (Pa)",
+				"type": "String"
+			},
+			{
+				"name": "Average Wind Speed (Km/h)",
+				"type": "String"
+			},
+			{
+				"name": "Prevailing Wind Direction",
+				"type": "String"
+			},
+			{
+				"name": "Solar Radiation (W/m�)",
+				"type": "String"
+			}
+		]
+	}
+}
