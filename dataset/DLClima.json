@@ -1,0 +1,23 @@
+{
+	"name": "DLClima",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "DataLake"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Weather.xls",
+				"fileSystem": "rpa"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": []
+	}
+}
