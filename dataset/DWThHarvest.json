@@ -12,7 +12,7 @@
 		"type": "AzureSqlTable",
 		"schema": [
 			{
-				"name": "idRiego",
+				"name": "idHarvest",
 				"type": "int",
 				"precision": 10
 			},
@@ -22,26 +22,35 @@
 				"precision": 10
 			},
 			{
-				"name": "FechaInicio",
-				"type": "date"
-			},
-			{
-				"name": "FechaFin",
-				"type": "date"
-			},
-			{
-				"name": "m3Real",
-				"type": "float",
-				"precision": 15
-			},
-			{
-				"name": "TiempoOperacion",
-				"type": "time",
-				"scale": 7
-			},
-			{
 				"name": "Sector",
 				"type": "varchar"
+			},
+			{
+				"name": "n_bins",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "kilos",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "market",
+				"type": "varchar"
+			},
+			{
+				"name": "truck_plate",
+				"type": "varchar"
+			},
+			{
+				"name": "variety",
+				"type": "varchar"
+			},
+			{
+				"name": "internal_guide",
+				"type": "int",
+				"precision": 10
 			}
 		],
 		"typeProperties": {
