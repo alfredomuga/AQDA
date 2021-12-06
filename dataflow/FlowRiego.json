@@ -21,7 +21,7 @@
 					"name": "Seleccionar1"
 				}
 			],
-			"script": "source(output(\n\t\t{ï»¿\"Nombre\"} as string,\n\t\t{F. Ini} as string,\n\t\t{F. Ter} as string,\n\t\t{m3 Real} as string,\n\t\t{m3 Prg} as string,\n\t\t{mm Real} as string,\n\t\t{mm Prg} as string,\n\t\t{T. Oper} as string,\n\t\tHuerto as string,\n\t\tSectores as string,\n\t\tFertirrigado as string,\n\t\tcc1 as string,\n\t\tcc2 as string,\n\t\tcc3 as string,\n\t\tcc4 as string,\n\t\tcc5 as string,\n\t\tcc6 as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 select(mapColumn(\n\t\tSegmento = {ï»¿\"Nombre\"},\n\t\tFechaInicial = {F. Ini},\n\t\tFechaTermino = {F. Ter},\n\t\tm3Real = {m3 Real},\n\t\t{T. Oper}\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Seleccionar1"
+			"script": "source(output(\n\t\t{ï»¿\"Nombre\"} as string,\n\t\t{F. Ini} as timestamp 'dd-MM-yyyy',\n\t\t{F. Ter} as timestamp 'dd-MM-yyyy',\n\t\t{m3 Real} as double,\n\t\t{m3 Prg} as string,\n\t\t{mm Real} as string,\n\t\t{mm Prg} as string,\n\t\t{T. Oper} as string,\n\t\tHuerto as string,\n\t\tSectores as string,\n\t\tFertirrigado as string,\n\t\tcc1 as string,\n\t\tcc2 as string,\n\t\tcc3 as string,\n\t\tcc4 as string,\n\t\tcc5 as string,\n\t\tcc6 as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 select(mapColumn(\n\t\tSegmento = {ï»¿\"Nombre\"},\n\t\tFechaInicial = {F. Ini},\n\t\tFechaTermino = {F. Ter},\n\t\tm3Real = {m3 Real},\n\t\t{T. Oper}\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Seleccionar1"
 		}
 	}
 }
