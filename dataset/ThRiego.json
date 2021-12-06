@@ -37,6 +37,10 @@
 			{
 				"name": "TiempoOperacion",
 				"type": "varchar"
+			},
+			{
+				"name": "Sector",
+				"type": "varchar"
 			}
 		],
 		"typeProperties": {
