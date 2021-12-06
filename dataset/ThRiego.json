@@ -36,7 +36,8 @@
 			},
 			{
 				"name": "TiempoOperacion",
-				"type": "timestamp"
+				"type": "time",
+				"scale": 7
 			},
 			{
 				"name": "Sector",
