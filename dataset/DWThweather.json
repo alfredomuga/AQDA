@@ -1,0 +1,40 @@
+{
+	"name": "DWThweather",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "DWAqda"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "idWeather",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "idFecha",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Lluvia",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "ET0",
+				"type": "float",
+				"precision": 15
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "ThWeather"
+		}
+	}
+}
