@@ -1,0 +1,47 @@
+{
+	"name": "ThRiego",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "DWAqda"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "idRiego",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "idFecha",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "FechaInicio",
+				"type": "date"
+			},
+			{
+				"name": "FechaFin",
+				"type": "date"
+			},
+			{
+				"name": "m3Real",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "TiempoOperacion",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "ThRiego"
+		}
+	}
+}
