@@ -1,5 +1,5 @@
 {
-	"name": "DWThRiego",
+	"name": "DWThHarvest",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureSqlDatabase1",
@@ -46,7 +46,7 @@
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "ThRiego"
+			"table": "ThHarvest"
 		}
 	}
 }
