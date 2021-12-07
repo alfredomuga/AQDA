@@ -1,5 +1,5 @@
 {
-	"name": "DlMaestraSec",
+	"name": "DLMaestraSec",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureDataLakeStorage1",
