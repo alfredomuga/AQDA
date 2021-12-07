@@ -1,5 +1,5 @@
 {
-	"name": "DLFertilizantes",
+	"name": "DlMaestraSec",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureDataLakeStorage1",
@@ -13,7 +13,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "Fertilizantes.json",
+				"fileName": "Presentacion de Campo.json",
 				"fileSystem": "list"
 			}
 		},
@@ -32,8 +32,11 @@
 				"Title": {
 					"type": "string"
 				},
-				"N_x0028__x0025_p_x002f_p_x0029_": {
-					"type": "number"
+				"Sector": {
+					"type": "string"
+				},
+				"Area": {
+					"type": "string"
 				},
 				"Modified": {
 					"type": "string"
@@ -83,10 +86,10 @@
 							"type": "string"
 						},
 						"Email": {
-							"type": "string"
+							"type": "null"
 						},
 						"Picture": {
-							"type": "string"
+							"type": "null"
 						},
 						"Department": {
 							"type": "null"
@@ -139,24 +142,6 @@
 				},
 				"VersionNumber": {
 					"type": "string"
-				},
-				"K2O_x0028__x0025_p_x002f_p_x0029": {
-					"type": "number"
-				},
-				"P2O5_x0028__x0025_p_x002f_p_x002": {
-					"type": "number"
-				},
-				"B_x0028__x0025_p_x002f_p_x0029_": {
-					"type": "number"
-				},
-				"CaO_x0028__x0025_p_x002f_p_x0029": {
-					"type": "number"
-				},
-				"Zn_x0028_NO3_x0029_2_x0028__x002": {
-					"type": "number"
-				},
-				"MgO_x0028__x0025_p_x002f_p_x0029": {
-					"type": "number"
 				}
 			}
 		}
