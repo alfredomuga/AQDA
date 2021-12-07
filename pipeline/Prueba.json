@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "FlowProduccion",
+						"referenceName": "FlowDimSec",
 						"type": "DataFlowReference"
 					},
 					"compute": {
