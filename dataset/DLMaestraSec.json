@@ -36,7 +36,7 @@
 					"type": "string"
 				},
 				"Area": {
-					"type": "string"
+					"type": "number"
 				},
 				"Modified": {
 					"type": "string"
