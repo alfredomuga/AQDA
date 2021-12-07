@@ -55,6 +55,10 @@
 			{
 				"name": "Especie",
 				"type": "varchar"
+			},
+			{
+				"name": "NombreTabla",
+				"type": "varchar"
 			}
 		],
 		"typeProperties": {

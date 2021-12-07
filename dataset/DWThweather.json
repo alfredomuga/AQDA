@@ -30,6 +30,10 @@
 				"name": "ET0",
 				"type": "float",
 				"precision": 15
+			},
+			{
+				"name": "NombreTabla",
+				"type": "varchar"
 			}
 		],
 		"typeProperties": {
