@@ -28,6 +28,19 @@
 				"name": "Valor",
 				"type": "float",
 				"precision": 15
+			},
+			{
+				"name": "Sector",
+				"type": "varchar"
+			},
+			{
+				"name": "NombreSector",
+				"type": "varchar"
+			},
+			{
+				"name": "Area",
+				"type": "float",
+				"precision": 15
 			}
 		],
 		"typeProperties": {
