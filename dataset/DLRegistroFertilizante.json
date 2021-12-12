@@ -1,0 +1,200 @@
+{
+	"name": "DLRegistroFertilizante",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "DataLake"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "RegistroFertilizantes.json",
+				"fileSystem": "list"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"odata.etag": {
+					"type": "string"
+				},
+				"ItemInternalId": {
+					"type": "string"
+				},
+				"ID": {
+					"type": "integer"
+				},
+				"Title": {
+					"type": "string"
+				},
+				"Sistema": {
+					"type": "object",
+					"properties": {
+						"odata.type": {
+							"type": "string"
+						},
+						"Id": {
+							"type": "integer"
+						},
+						"Value": {
+							"type": "string"
+						}
+					}
+				},
+				"Sistema#Id": {
+					"type": "integer"
+				},
+				"Estanque": {
+					"type": "object",
+					"properties": {
+						"odata.type": {
+							"type": "string"
+						},
+						"Id": {
+							"type": "integer"
+						},
+						"Value": {
+							"type": "string"
+						}
+					}
+				},
+				"Estanque#Id": {
+					"type": "integer"
+				},
+				"NombreMezcla": {
+					"type": "object",
+					"properties": {
+						"odata.type": {
+							"type": "string"
+						},
+						"Id": {
+							"type": "integer"
+						},
+						"Value": {
+							"type": "string"
+						}
+					}
+				},
+				"NombreMezcla#Id": {
+					"type": "integer"
+				},
+				"LitrosAplicados": {
+					"type": "number"
+				},
+				"FertilizanteAplicado": {
+					"type": "number"
+				},
+				"Modified": {
+					"type": "string"
+				},
+				"Created": {
+					"type": "string"
+				},
+				"Author": {
+					"type": "object",
+					"properties": {
+						"odata.type": {
+							"type": "string"
+						},
+						"Claims": {
+							"type": "string"
+						},
+						"DisplayName": {
+							"type": "string"
+						},
+						"Email": {
+							"type": "null"
+						},
+						"Picture": {
+							"type": "null"
+						},
+						"Department": {
+							"type": "null"
+						},
+						"JobTitle": {
+							"type": "null"
+						}
+					}
+				},
+				"Author#Claims": {
+					"type": "string"
+				},
+				"Editor": {
+					"type": "object",
+					"properties": {
+						"odata.type": {
+							"type": "string"
+						},
+						"Claims": {
+							"type": "string"
+						},
+						"DisplayName": {
+							"type": "string"
+						},
+						"Email": {
+							"type": "null"
+						},
+						"Picture": {
+							"type": "null"
+						},
+						"Department": {
+							"type": "null"
+						},
+						"JobTitle": {
+							"type": "null"
+						}
+					}
+				},
+				"Editor#Claims": {
+					"type": "string"
+				},
+				"Identifier": {
+					"type": "string"
+				},
+				"IsFolder": {
+					"type": "boolean"
+				},
+				"Thumbnail": {
+					"type": "object",
+					"properties": {
+						"Large": {
+							"type": "null"
+						},
+						"Medium": {
+							"type": "null"
+						},
+						"Small": {
+							"type": "null"
+						}
+					}
+				},
+				"Link1": {
+					"type": "string"
+				},
+				"Name": {
+					"type": "string"
+				},
+				"FilenameWithExtension": {
+					"type": "string"
+				},
+				"Path": {
+					"type": "string"
+				},
+				"FullPath": {
+					"type": "string"
+				},
+				"HasAttachments": {
+					"type": "boolean"
+				},
+				"VersionNumber": {
+					"type": "string"
+				}
+			}
+		}
+	}
+}
