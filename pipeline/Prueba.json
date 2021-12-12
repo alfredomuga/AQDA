@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "FlowDimFertilizantes",
+						"referenceName": "FlowRegistroFertilizante",
 						"type": "DataFlowReference"
 					},
 					"compute": {
