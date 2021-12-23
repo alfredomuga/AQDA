@@ -1,0 +1,54 @@
+{
+	"name": "DWDimFertilizante",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "DWAqda"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "idDIMFertilizante",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Compuesto",
+				"type": "varchar"
+			},
+			{
+				"name": "Nombre",
+				"type": "varchar"
+			},
+			{
+				"name": "Valor",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "_Hash",
+				"type": "varchar"
+			},
+			{
+				"name": "_FechaModificacion",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "_FechaIngreso",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "DIMFertilizante"
+		}
+	}
+}
