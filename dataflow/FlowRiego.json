@@ -13,6 +13,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "DLRiego2020",
+						"type": "DatasetReference"
+					},
+					"name": "source2"
 				}
 			],
 			"sinks": [
@@ -33,9 +40,12 @@
 				},
 				{
 					"name": "Columnaderivada1"
+				},
+				{
+					"name": "union"
 				}
 			],
-			"script": "source(output(\n\t\t{ï»¿\"Nombre\"} as string,\n\t\t{F. Ini} as timestamp 'dd-MM-yyyy',\n\t\t{F. Ter} as timestamp 'dd-MM-yyyy',\n\t\t{m3 Real} as double,\n\t\t{m3 Prg} as string,\n\t\t{mm Real} as string,\n\t\t{mm Prg} as string,\n\t\t{T. Oper} as timestamp 'HH:mm',\n\t\tHuerto as string,\n\t\tSectores as string,\n\t\tFertirrigado as string,\n\t\tcc1 as string,\n\t\tcc2 as string,\n\t\tcc3 as string,\n\t\tcc4 as string,\n\t\tcc5 as string,\n\t\tcc6 as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 select(mapColumn(\n\t\tSegmento = {ï»¿\"Nombre\"},\n\t\tFechaInicial = {F. Ini},\n\t\tFechaTermino = {F. Ter},\n\t\tm3Real = {m3 Real},\n\t\t{T. Oper},\n\t\tSectores\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Seleccionar1\nColumnaderivada1 alterRow(insertIf(true())) ~> Modificarfila1\nSeleccionar1 derive(idFecha = year(FechaInicial)*10000+month(FechaInicial)*100+dayOfMonth(FechaInicial),\n\t\tNombreTabla = 'ThRiego') ~> Columnaderivada1\nModificarfila1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tidRiego as integer,\n\t\tidFecha as integer,\n\t\tFechaInicio as date,\n\t\tFechaFin as date,\n\t\tm3Real as double,\n\t\tTiempoOperacion as timestamp,\n\t\tSector as string,\n\t\tNombreTabla as string\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tpreSQLs:['truncate table dbo.ThRiego'],\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tFechaInicio = FechaInicial,\n\t\tFechaFin = FechaTermino,\n\t\tm3Real,\n\t\tTiempoOperacion = {T. Oper},\n\t\tSector = Segmento,\n\t\tidFecha,\n\t\tNombreTabla\n\t)) ~> sink1"
+			"script": "source(output(\n\t\t{ï»¿\"Nombre\"} as string,\n\t\t{F. Ini} as timestamp 'dd-MM-yyyy',\n\t\t{F. Ter} as timestamp 'dd-MM-yyyy',\n\t\t{m3 Real} as double,\n\t\t{m3 Prg} as string,\n\t\t{mm Real} as string,\n\t\t{mm Prg} as string,\n\t\t{T. Oper} as timestamp 'HH:mm',\n\t\tHuerto as string,\n\t\tSectores as string,\n\t\tFertirrigado as string,\n\t\tcc1 as string,\n\t\tcc2 as string,\n\t\tcc3 as string,\n\t\tcc4 as string,\n\t\tcc5 as string,\n\t\tcc6 as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource(output(\n\t\t{ï»¿\"Nombre\"} as string,\n\t\t{F. Ini} as string,\n\t\t{F. Ter} as string,\n\t\t{m3 Real} as string,\n\t\t{m3 Prg} as string,\n\t\t{mm Real} as string,\n\t\t{mm Prg} as string,\n\t\t{T. Oper} as string,\n\t\tHuerto as string,\n\t\tSectores as string,\n\t\tFertirrigado as string,\n\t\tcc1 as string,\n\t\tcc2 as string,\n\t\tcc3 as string,\n\t\tcc4 as string,\n\t\tcc5 as string,\n\t\tcc6 as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source2\nunion select(mapColumn(\n\t\tSegmento = {ï»¿\"Nombre\"},\n\t\tFechaInicial = {F. Ini},\n\t\tFechaTermino = {F. Ter},\n\t\tm3Real = {m3 Real},\n\t\t{T. Oper},\n\t\tSectores\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Seleccionar1\nColumnaderivada1 alterRow(insertIf(true())) ~> Modificarfila1\nSeleccionar1 derive(idFecha = year(FechaInicial)*10000+month(FechaInicial)*100+dayOfMonth(FechaInicial),\n\t\tNombreTabla = 'ThRiego') ~> Columnaderivada1\nsource1, source2 union(byName: true)~> union\nModificarfila1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tidRiego as integer,\n\t\tidFecha as integer,\n\t\tFechaInicio as date,\n\t\tFechaFin as date,\n\t\tm3Real as double,\n\t\tTiempoOperacion as timestamp,\n\t\tSector as string,\n\t\tNombreTabla as string\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tpreSQLs:['truncate table dbo.ThRiego'],\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tFechaInicio = FechaInicial,\n\t\tFechaFin = FechaTermino,\n\t\tm3Real,\n\t\tTiempoOperacion = {T. Oper},\n\t\tSector = Segmento,\n\t\tidFecha,\n\t\tNombreTabla\n\t)) ~> sink1"
 		}
 	}
 }
