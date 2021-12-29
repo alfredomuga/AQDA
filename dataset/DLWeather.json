@@ -6,7 +6,7 @@
 			"type": "LinkedServiceReference"
 		},
 		"folder": {
-			"name": "DataLake"
+			"name": "DataLake/DLPROCESOS"
 		},
 		"annotations": [],
 		"type": "DelimitedText",

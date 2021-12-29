@@ -1,20 +1,20 @@
 {
-	"name": "DLRiego2020",
+	"name": "DLMayor2020",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureDataLakeStorage1",
 			"type": "LinkedServiceReference"
 		},
 		"folder": {
-			"name": "DataLake/DLPROCESOS"
+			"name": "DataLake/DLFINANCIERO"
 		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "Riego2020.csv",
-				"fileSystem": "tablasauxiliares"
+				"fileName": "LibroMayor2020.CSV",
+				"fileSystem": "rpa"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
@@ -23,71 +23,51 @@
 		},
 		"schema": [
 			{
-				"name": "ï»¿\"Nombre\"",
+				"name": "Cuenta",
 				"type": "String"
 			},
 			{
-				"name": "F. Ini",
+				"name": "Nombre Cuenta",
 				"type": "String"
 			},
 			{
-				"name": "F. Ter",
+				"name": "Saldo Anterior Deudor",
 				"type": "String"
 			},
 			{
-				"name": "m3 Real",
+				"name": "Saldo Anterior Acreedor",
 				"type": "String"
 			},
 			{
-				"name": "m3 Prg",
+				"name": "Fecha",
 				"type": "String"
 			},
 			{
-				"name": "mm Real",
+				"name": "N�mero",
 				"type": "String"
 			},
 			{
-				"name": "mm Prg",
+				"name": "Tipo Comprobante",
 				"type": "String"
 			},
 			{
-				"name": "T. Oper",
+				"name": "Descripci�n",
 				"type": "String"
 			},
 			{
-				"name": "Huerto",
+				"name": "D�bito",
 				"type": "String"
 			},
 			{
-				"name": "Sectores",
+				"name": "Cr�dito",
 				"type": "String"
 			},
 			{
-				"name": "Fertirrigado",
+				"name": "Deudor",
 				"type": "String"
 			},
 			{
-				"name": "cc1",
-				"type": "String"
-			},
-			{
-				"name": "cc2",
-				"type": "String"
-			},
-			{
-				"name": "cc3",
-				"type": "String"
-			},
-			{
-				"name": "cc4",
-				"type": "String"
-			},
-			{
-				"name": "cc5",
-				"type": "String"
-			},
-			{
-				"name": "cc6",
+				"name": "Acreedor",
 				"type": "String"
 			}
 		]
