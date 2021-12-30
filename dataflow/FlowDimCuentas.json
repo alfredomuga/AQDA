@@ -1,0 +1,15 @@
+{
+	"name": "FlowDimCuentas",
+	"properties": {
+		"folder": {
+			"name": "Dimensiones"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [],
+			"sinks": [],
+			"transformations": [],
+			"script": ""
+		}
+	}
+}

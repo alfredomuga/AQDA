@@ -6,7 +6,7 @@
 			"type": "LinkedServiceReference"
 		},
 		"folder": {
-			"name": "DWAqda"
+			"name": "DWAqda/Dimensiones"
 		},
 		"annotations": [],
 		"type": "AzureSqlTable",

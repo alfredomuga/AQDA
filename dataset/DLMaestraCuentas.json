@@ -1,0 +1,180 @@
+{
+	"name": "DLMaestraCuentas",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "DataLake/DIMENSIONES"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "MaestraDeCuenta.json",
+				"fileSystem": "list"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"odata.etag": {
+					"type": "string"
+				},
+				"ItemInternalId": {
+					"type": "string"
+				},
+				"ID": {
+					"type": "integer"
+				},
+				"Title": {
+					"type": "string"
+				},
+				"DESCRIPCION": {
+					"type": "string"
+				},
+				"CLASIFICACION1": {
+					"type": "object",
+					"properties": {
+						"odata.type": {
+							"type": "string"
+						},
+						"Id": {
+							"type": "integer"
+						},
+						"Value": {
+							"type": "string"
+						}
+					}
+				},
+				"CLASIFICACION1#Id": {
+					"type": "integer"
+				},
+				"CLASIFICACION2": {
+					"type": "object",
+					"properties": {
+						"odata.type": {
+							"type": "string"
+						},
+						"Id": {
+							"type": "integer"
+						},
+						"Value": {
+							"type": "string"
+						}
+					}
+				},
+				"CLASIFICACION2#Id": {
+					"type": "integer"
+				},
+				"Modified": {
+					"type": "string"
+				},
+				"Created": {
+					"type": "string"
+				},
+				"Author": {
+					"type": "object",
+					"properties": {
+						"odata.type": {
+							"type": "string"
+						},
+						"Claims": {
+							"type": "string"
+						},
+						"DisplayName": {
+							"type": "string"
+						},
+						"Email": {
+							"type": "null"
+						},
+						"Picture": {
+							"type": "null"
+						},
+						"Department": {
+							"type": "null"
+						},
+						"JobTitle": {
+							"type": "null"
+						}
+					}
+				},
+				"Author#Claims": {
+					"type": "string"
+				},
+				"Editor": {
+					"type": "object",
+					"properties": {
+						"odata.type": {
+							"type": "string"
+						},
+						"Claims": {
+							"type": "string"
+						},
+						"DisplayName": {
+							"type": "string"
+						},
+						"Email": {
+							"type": "null"
+						},
+						"Picture": {
+							"type": "null"
+						},
+						"Department": {
+							"type": "null"
+						},
+						"JobTitle": {
+							"type": "null"
+						}
+					}
+				},
+				"Editor#Claims": {
+					"type": "string"
+				},
+				"Identifier": {
+					"type": "string"
+				},
+				"IsFolder": {
+					"type": "boolean"
+				},
+				"Thumbnail": {
+					"type": "object",
+					"properties": {
+						"Large": {
+							"type": "null"
+						},
+						"Medium": {
+							"type": "null"
+						},
+						"Small": {
+							"type": "null"
+						}
+					}
+				},
+				"Link1": {
+					"type": "string"
+				},
+				"Name": {
+					"type": "string"
+				},
+				"FilenameWithExtension": {
+					"type": "string"
+				},
+				"Path": {
+					"type": "string"
+				},
+				"FullPath": {
+					"type": "string"
+				},
+				"HasAttachments": {
+					"type": "boolean"
+				},
+				"VersionNumber": {
+					"type": "string"
+				}
+			}
+		}
+	}
+}

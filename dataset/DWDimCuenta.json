@@ -1,69 +1,62 @@
 {
-	"name": "DWThHarvest",
+	"name": "DWDimCuenta",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureSqlDatabase1",
 			"type": "LinkedServiceReference"
 		},
 		"folder": {
-			"name": "DWAqda/Th"
+			"name": "DWAqda/Dimensiones"
 		},
 		"annotations": [],
 		"type": "AzureSqlTable",
 		"schema": [
 			{
-				"name": "idHarvest",
+				"name": "idCuentas",
 				"type": "int",
 				"precision": 10
 			},
 			{
-				"name": "idFecha",
+				"name": "CodigoEmpresaERP",
 				"type": "int",
 				"precision": 10
 			},
 			{
-				"name": "Sector",
+				"name": "Clasificacion1",
 				"type": "varchar"
 			},
 			{
-				"name": "n_bins",
-				"type": "int",
-				"precision": 10
-			},
-			{
-				"name": "kilos",
-				"type": "int",
-				"precision": 10
-			},
-			{
-				"name": "market",
+				"name": "Clasificacion2",
 				"type": "varchar"
 			},
 			{
-				"name": "truck_plate",
+				"name": "Numero",
 				"type": "varchar"
 			},
 			{
-				"name": "variety",
+				"name": "Nombre",
 				"type": "varchar"
 			},
 			{
-				"name": "internal_guide",
-				"type": "int",
-				"precision": 10
+				"name": "_FechaModificacion",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
 			},
 			{
-				"name": "Especie",
-				"type": "varchar"
+				"name": "_FechaIngreso",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
 			},
 			{
-				"name": "NombreTabla",
+				"name": "_Hash",
 				"type": "varchar"
 			}
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "ThHarvest"
+			"table": "DIMCuentas"
 		}
 	}
 }
