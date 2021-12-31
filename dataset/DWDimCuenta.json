@@ -17,11 +17,6 @@
 				"precision": 10
 			},
 			{
-				"name": "CodigoEmpresaERP",
-				"type": "int",
-				"precision": 10
-			},
-			{
 				"name": "Clasificacion1",
 				"type": "varchar"
 			},
