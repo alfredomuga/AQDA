@@ -1,0 +1,33 @@
+{
+	"name": "DWAuxBalance",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "DWAqda/Dimensiones"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "Orden",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Visualizacion",
+				"type": "varchar"
+			},
+			{
+				"name": "Relacion",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "AuxVisualizacionBalance"
+		}
+	}
+}

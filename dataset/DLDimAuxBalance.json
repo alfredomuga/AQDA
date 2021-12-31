@@ -1,0 +1,23 @@
+{
+	"name": "DLDimAuxBalance",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "DataLake/DIMENSIONES"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "AUXBALANCE.xlsx",
+				"fileSystem": "tablasauxiliares"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": []
+	}
+}
