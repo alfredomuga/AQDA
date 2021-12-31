@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "EERR",
+						"referenceName": "FlowDimAuxEERR",
 						"type": "DataFlowReference"
 					},
 					"compute": {
