@@ -20,6 +20,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "DWDimCuenta",
+						"type": "DatasetReference"
+					},
+					"name": "source2"
 				}
 			],
 			"sinks": [],
@@ -34,7 +41,7 @@
 					"name": "Columnaderivada1"
 				}
 			],
-			"script": "source(output(\n\t\tCuenta as string,\n\t\t{Nombre Cuenta} as string,\n\t\t{Saldo Anterior Deudor} as string,\n\t\t{Saldo Anterior Acreedor} as string,\n\t\tFecha as string,\n\t\t{N�mero} as string,\n\t\t{Tipo Comprobante} as string,\n\t\t{Descripci�n} as string,\n\t\t{D�bito} as string,\n\t\t{Cr�dito} as string,\n\t\tDeudor as string,\n\t\tAcreedor as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> Mayores\nsource(output(\n\t\tCuenta as string,\n\t\t{Nombre Cuenta} as string,\n\t\t{Saldo Anterior Deudor} as string,\n\t\t{Saldo Anterior Acreedor} as string,\n\t\tFecha as string,\n\t\t{N�mero} as string,\n\t\t{Tipo Comprobante} as string,\n\t\t{Descripci�n} as string,\n\t\t{D�bito} as string,\n\t\t{Cr�dito} as string,\n\t\tDeudor as string,\n\t\tAcreedor as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nMayores, source1 union(byName: true)~> union\nunion select(mapColumn(\n\t\tCuenta,\n\t\t{Nombre Cuenta},\n\t\t{Saldo Anterior Deudor},\n\t\t{Saldo Anterior Acreedor},\n\t\tFecha,\n\t\t{N�mero},\n\t\t{Tipo Comprobante},\n\t\t{Descripci�n},\n\t\t{D�bito},\n\t\t{Cr�dito},\n\t\tDeudor,\n\t\tAcreedor\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Seleccionar1\nSeleccionar1 derive(saldo = toInteger({D�bito})-toInteger({Cr�dito})) ~> Columnaderivada1"
+			"script": "source(output(\n\t\tCuenta as string,\n\t\t{Nombre Cuenta} as string,\n\t\t{Saldo Anterior Deudor} as string,\n\t\t{Saldo Anterior Acreedor} as string,\n\t\tFecha as string,\n\t\t{N�mero} as string,\n\t\t{Tipo Comprobante} as string,\n\t\t{Descripci�n} as string,\n\t\t{D�bito} as string,\n\t\t{Cr�dito} as string,\n\t\tDeudor as string,\n\t\tAcreedor as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> Mayores\nsource(output(\n\t\tCuenta as string,\n\t\t{Nombre Cuenta} as string,\n\t\t{Saldo Anterior Deudor} as string,\n\t\t{Saldo Anterior Acreedor} as string,\n\t\tFecha as string,\n\t\t{N�mero} as string,\n\t\t{Tipo Comprobante} as string,\n\t\t{Descripci�n} as string,\n\t\t{D�bito} as string,\n\t\t{Cr�dito} as string,\n\t\tDeudor as string,\n\t\tAcreedor as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource(output(\n\t\tidCuentas as integer,\n\t\tClasificacion1 as string,\n\t\tClasificacion2 as string,\n\t\tNumero as string,\n\t\tNombre as string,\n\t\t{_FechaModificacion} as timestamp,\n\t\t{_FechaIngreso} as timestamp,\n\t\t{_Hash} as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> source2\nMayores, source1 union(byName: true)~> union\nunion select(mapColumn(\n\t\tCuenta,\n\t\t{Nombre Cuenta},\n\t\t{Saldo Anterior Deudor},\n\t\t{Saldo Anterior Acreedor},\n\t\tFecha,\n\t\t{N�mero},\n\t\t{Tipo Comprobante},\n\t\t{Descripci�n},\n\t\t{D�bito},\n\t\t{Cr�dito},\n\t\tDeudor,\n\t\tAcreedor\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Seleccionar1\nSeleccionar1 derive(saldo = toInteger({D�bito})-toInteger({Cr�dito})) ~> Columnaderivada1"
 		}
 	}
 }
