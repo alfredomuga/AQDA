@@ -1,0 +1,48 @@
+{
+	"name": "DWThEERR",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "DWAqda/Th"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "idThEERR",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "idFecha",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "idMaestroCuenta",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Monto",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "Descripcion",
+				"type": "varchar"
+			},
+			{
+				"name": "NombreTabla",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "ThEERR"
+		}
+	}
+}
