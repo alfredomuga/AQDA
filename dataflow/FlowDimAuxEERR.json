@@ -1,0 +1,35 @@
+{
+	"name": "FlowDimAuxEERR",
+	"properties": {
+		"folder": {
+			"name": "Dimensiones"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DLDimAuxEERR",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DWAuxEERR",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Modificarfila1"
+				}
+			],
+			"script": "source(output(\n\t\tOrden as integer,\n\t\tVisualizacion as string,\n\t\tRelacion as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 alterRow(insertIf(true())) ~> Modificarfila1\nModificarfila1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tOrden as integer,\n\t\tVisualizacion as string,\n\t\tRelacion as string\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tpreSQLs:['truncate table dbo.AuxVisualizacionEERR'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tOrden,\n\t\tVisualizacion,\n\t\tRelacion\n\t)) ~> sink1"
+		}
+	}
+}
