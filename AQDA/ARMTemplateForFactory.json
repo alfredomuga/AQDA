@@ -1,0 +1,3339 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Nombre de instancia de Data Factory",
+			"defaultValue": "AQDA"
+		},
+		"AzureDataLakeStorage1_accountKey": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"accountKey\"de \"AzureDataLakeStorage1\""
+		},
+		"AzurePostgreSql1_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"connectionString\"de \"AzurePostgreSql1\""
+		},
+		"AzureSqlDatabase1_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"connectionString\"de \"AzureSqlDatabase1\""
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://aqda.dfs.core.windows.net"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/0Dim')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "DimFert",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "FlowThFertilizantes",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"source2": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "DimSec",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "FlowDimSec",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "AuxDimEERR",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "FlowDimAuxEERR",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "AuxDimBalance",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "FlowDimAuxBalance",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "DimCuentas",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "FlowDimCuentas",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"source2": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/FlowThFertilizantes')]",
+				"[concat(variables('factoryId'), '/dataflows/FlowDimSec')]",
+				"[concat(variables('factoryId'), '/dataflows/FlowDimAuxEERR')]",
+				"[concat(variables('factoryId'), '/dataflows/FlowDimAuxBalance')]",
+				"[concat(variables('factoryId'), '/dataflows/FlowDimCuentas')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/1Th')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "ThRiego",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "FlowRiego",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"source2": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "ThWeather",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "FlowWeather",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"Inicio": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "ThProduccion",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "FlowProduccion",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"SectorMaestraPOST": {},
+									"VariedadMaestraPOST": {},
+									"Especies": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "RegistroFertilizante",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "FlowRegistroFertilizante",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "EEERR",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "EERR",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"Mayores": {},
+									"source1": {},
+									"source2": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/FlowRiego')]",
+				"[concat(variables('factoryId'), '/dataflows/FlowWeather')]",
+				"[concat(variables('factoryId'), '/dataflows/FlowProduccion')]",
+				"[concat(variables('factoryId'), '/dataflows/FlowRegistroFertilizante')]",
+				"[concat(variables('factoryId'), '/dataflows/EERR')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Consolidado')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "dim",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "0Dim",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "TH",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "dim",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "1Th",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/0Dim')]",
+				"[concat(variables('factoryId'), '/pipelines/1Th')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Prueba')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "FlowDimAuxBalance",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/FlowDimAuxBalance')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AppAssignments')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzurePostgreSql1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "POSTGRESQL"
+				},
+				"annotations": [],
+				"type": "AzurePostgreSqlTable",
+				"schema": [
+					{
+						"name": "id",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "date",
+						"type": "date",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "duration",
+						"type": "integer",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "worker_id",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "sector_id",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "task_id",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "created_at",
+						"type": "timestamp without time zone",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "updated_at",
+						"type": "timestamp without time zone",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "user_id",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					}
+				],
+				"typeProperties": {
+					"schema": "public",
+					"table": "assignments"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzurePostgreSql1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AppHarvest')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzurePostgreSql1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "POSTGRESQL"
+				},
+				"annotations": [],
+				"type": "AzurePostgreSqlTable",
+				"schema": [
+					{
+						"name": "id",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "sector_id",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "n_bins",
+						"type": "integer",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "kilos",
+						"type": "integer",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "market",
+						"type": "character varying",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "truck_plate",
+						"type": "character varying",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "created_at",
+						"type": "timestamp without time zone",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "updated_at",
+						"type": "timestamp without time zone",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "date",
+						"type": "date",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "variety_id",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "internal_guide",
+						"type": "integer",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "buyer_id",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					}
+				],
+				"typeProperties": {
+					"schema": "public",
+					"table": "harvests"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzurePostgreSql1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DLDimAuxBalance')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DataLake/DIMENSIONES"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "Hoja1",
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "AUXBALANCE.xlsx",
+						"fileSystem": "tablasauxiliares"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": [
+					{
+						"name": "Orden",
+						"type": "String"
+					},
+					{
+						"name": "Visualizacion",
+						"type": "String"
+					},
+					{
+						"name": "Relacion",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DLDimAuxEERR')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DataLake/DIMENSIONES"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "Hoja1",
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "AUXEERR.xlsx",
+						"fileSystem": "tablasauxiliares"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": [
+					{
+						"name": "Orden",
+						"type": "String"
+					},
+					{
+						"name": "Visualizacion",
+						"type": "String"
+					},
+					{
+						"name": "Relacion",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DLFertilizantes')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DataLake/DLPROCESOS"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "Fertilizantes.json",
+						"fileSystem": "list"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"odata.etag": {
+							"type": "string"
+						},
+						"ItemInternalId": {
+							"type": "string"
+						},
+						"ID": {
+							"type": "integer"
+						},
+						"Title": {
+							"type": "string"
+						},
+						"N_x0028__x0025_p_x002f_p_x0029_": {
+							"type": "number"
+						},
+						"Modified": {
+							"type": "string"
+						},
+						"Created": {
+							"type": "string"
+						},
+						"Author": {
+							"type": "object",
+							"properties": {
+								"odata.type": {
+									"type": "string"
+								},
+								"Claims": {
+									"type": "string"
+								},
+								"DisplayName": {
+									"type": "string"
+								},
+								"Email": {
+									"type": "null"
+								},
+								"Picture": {
+									"type": "null"
+								},
+								"Department": {
+									"type": "null"
+								},
+								"JobTitle": {
+									"type": "null"
+								}
+							}
+						},
+						"Author#Claims": {
+							"type": "string"
+						},
+						"Editor": {
+							"type": "object",
+							"properties": {
+								"odata.type": {
+									"type": "string"
+								},
+								"Claims": {
+									"type": "string"
+								},
+								"DisplayName": {
+									"type": "string"
+								},
+								"Email": {
+									"type": "string"
+								},
+								"Picture": {
+									"type": "string"
+								},
+								"Department": {
+									"type": "null"
+								},
+								"JobTitle": {
+									"type": "null"
+								}
+							}
+						},
+						"Editor#Claims": {
+							"type": "string"
+						},
+						"Identifier": {
+							"type": "string"
+						},
+						"IsFolder": {
+							"type": "boolean"
+						},
+						"Thumbnail": {
+							"type": "object",
+							"properties": {
+								"Large": {
+									"type": "null"
+								},
+								"Medium": {
+									"type": "null"
+								},
+								"Small": {
+									"type": "null"
+								}
+							}
+						},
+						"Link1": {
+							"type": "string"
+						},
+						"Name": {
+							"type": "string"
+						},
+						"FilenameWithExtension": {
+							"type": "string"
+						},
+						"Path": {
+							"type": "string"
+						},
+						"FullPath": {
+							"type": "string"
+						},
+						"HasAttachments": {
+							"type": "boolean"
+						},
+						"VersionNumber": {
+							"type": "string"
+						},
+						"K2O_x0028__x0025_p_x002f_p_x0029": {
+							"type": "number"
+						},
+						"P2O5_x0028__x0025_p_x002f_p_x002": {
+							"type": "number"
+						},
+						"B_x0028__x0025_p_x002f_p_x0029_": {
+							"type": "number"
+						},
+						"CaO_x0028__x0025_p_x002f_p_x0029": {
+							"type": "number"
+						},
+						"Zn_x0028_NO3_x0029_2_x0028__x002": {
+							"type": "number"
+						},
+						"MgO_x0028__x0025_p_x002f_p_x0029": {
+							"type": "number"
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DLMaestraCuentas')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DataLake/DIMENSIONES"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "MaestraDeCuenta.json",
+						"fileSystem": "list"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"odata.etag": {
+							"type": "string"
+						},
+						"ItemInternalId": {
+							"type": "string"
+						},
+						"ID": {
+							"type": "integer"
+						},
+						"Title": {
+							"type": "string"
+						},
+						"DESCRIPCION": {
+							"type": "string"
+						},
+						"CLASIFICACION1": {
+							"type": "object",
+							"properties": {
+								"odata.type": {
+									"type": "string"
+								},
+								"Id": {
+									"type": "integer"
+								},
+								"Value": {
+									"type": "string"
+								}
+							}
+						},
+						"CLASIFICACION1#Id": {
+							"type": "integer"
+						},
+						"CLASIFICACION2": {
+							"type": "object",
+							"properties": {
+								"odata.type": {
+									"type": "string"
+								},
+								"Id": {
+									"type": "integer"
+								},
+								"Value": {
+									"type": "string"
+								}
+							}
+						},
+						"CLASIFICACION2#Id": {
+							"type": "integer"
+						},
+						"Modified": {
+							"type": "string"
+						},
+						"Created": {
+							"type": "string"
+						},
+						"Author": {
+							"type": "object",
+							"properties": {
+								"odata.type": {
+									"type": "string"
+								},
+								"Claims": {
+									"type": "string"
+								},
+								"DisplayName": {
+									"type": "string"
+								},
+								"Email": {
+									"type": "null"
+								},
+								"Picture": {
+									"type": "null"
+								},
+								"Department": {
+									"type": "null"
+								},
+								"JobTitle": {
+									"type": "null"
+								}
+							}
+						},
+						"Author#Claims": {
+							"type": "string"
+						},
+						"Editor": {
+							"type": "object",
+							"properties": {
+								"odata.type": {
+									"type": "string"
+								},
+								"Claims": {
+									"type": "string"
+								},
+								"DisplayName": {
+									"type": "string"
+								},
+								"Email": {
+									"type": "null"
+								},
+								"Picture": {
+									"type": "null"
+								},
+								"Department": {
+									"type": "null"
+								},
+								"JobTitle": {
+									"type": "null"
+								}
+							}
+						},
+						"Editor#Claims": {
+							"type": "string"
+						},
+						"Identifier": {
+							"type": "string"
+						},
+						"IsFolder": {
+							"type": "boolean"
+						},
+						"Thumbnail": {
+							"type": "object",
+							"properties": {
+								"Large": {
+									"type": "null"
+								},
+								"Medium": {
+									"type": "null"
+								},
+								"Small": {
+									"type": "null"
+								}
+							}
+						},
+						"Link1": {
+							"type": "string"
+						},
+						"Name": {
+							"type": "string"
+						},
+						"FilenameWithExtension": {
+							"type": "string"
+						},
+						"Path": {
+							"type": "string"
+						},
+						"FullPath": {
+							"type": "string"
+						},
+						"HasAttachments": {
+							"type": "boolean"
+						},
+						"VersionNumber": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DLMaestraSec')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DataLake/DLPROCESOS"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "Presentacion de Campo.json",
+						"fileSystem": "list"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"odata.etag": {
+							"type": "string"
+						},
+						"ItemInternalId": {
+							"type": "string"
+						},
+						"ID": {
+							"type": "integer"
+						},
+						"Title": {
+							"type": "string"
+						},
+						"Sector": {
+							"type": "string"
+						},
+						"Area": {
+							"type": "number"
+						},
+						"Modified": {
+							"type": "string"
+						},
+						"Created": {
+							"type": "string"
+						},
+						"Author": {
+							"type": "object",
+							"properties": {
+								"odata.type": {
+									"type": "string"
+								},
+								"Claims": {
+									"type": "string"
+								},
+								"DisplayName": {
+									"type": "string"
+								},
+								"Email": {
+									"type": "null"
+								},
+								"Picture": {
+									"type": "null"
+								},
+								"Department": {
+									"type": "null"
+								},
+								"JobTitle": {
+									"type": "null"
+								}
+							}
+						},
+						"Author#Claims": {
+							"type": "string"
+						},
+						"Editor": {
+							"type": "object",
+							"properties": {
+								"odata.type": {
+									"type": "string"
+								},
+								"Claims": {
+									"type": "string"
+								},
+								"DisplayName": {
+									"type": "string"
+								},
+								"Email": {
+									"type": "null"
+								},
+								"Picture": {
+									"type": "null"
+								},
+								"Department": {
+									"type": "null"
+								},
+								"JobTitle": {
+									"type": "null"
+								}
+							}
+						},
+						"Editor#Claims": {
+							"type": "string"
+						},
+						"Identifier": {
+							"type": "string"
+						},
+						"IsFolder": {
+							"type": "boolean"
+						},
+						"Thumbnail": {
+							"type": "object",
+							"properties": {
+								"Large": {
+									"type": "null"
+								},
+								"Medium": {
+									"type": "null"
+								},
+								"Small": {
+									"type": "null"
+								}
+							}
+						},
+						"Link1": {
+							"type": "string"
+						},
+						"Name": {
+							"type": "string"
+						},
+						"FilenameWithExtension": {
+							"type": "string"
+						},
+						"Path": {
+							"type": "string"
+						},
+						"FullPath": {
+							"type": "string"
+						},
+						"HasAttachments": {
+							"type": "boolean"
+						},
+						"VersionNumber": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DLMayor2020')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DataLake/DLFINANCIERO"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "LibroMayor2020.CSV",
+						"fileSystem": "rpa"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Cuenta",
+						"type": "String"
+					},
+					{
+						"name": "Nombre Cuenta",
+						"type": "String"
+					},
+					{
+						"name": "Saldo Anterior Deudor",
+						"type": "String"
+					},
+					{
+						"name": "Saldo Anterior Acreedor",
+						"type": "String"
+					},
+					{
+						"name": "Fecha",
+						"type": "String"
+					},
+					{
+						"name": "N�mero",
+						"type": "String"
+					},
+					{
+						"name": "Tipo Comprobante",
+						"type": "String"
+					},
+					{
+						"name": "Descripci�n",
+						"type": "String"
+					},
+					{
+						"name": "D�bito",
+						"type": "String"
+					},
+					{
+						"name": "Cr�dito",
+						"type": "String"
+					},
+					{
+						"name": "Deudor",
+						"type": "String"
+					},
+					{
+						"name": "Acreedor",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DLMayor2021')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DataLake/DLFINANCIERO"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "LibroMayor2021.CSV",
+						"fileSystem": "rpa"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Cuenta",
+						"type": "String"
+					},
+					{
+						"name": "Nombre Cuenta",
+						"type": "String"
+					},
+					{
+						"name": "Saldo Anterior Deudor",
+						"type": "String"
+					},
+					{
+						"name": "Saldo Anterior Acreedor",
+						"type": "String"
+					},
+					{
+						"name": "Fecha",
+						"type": "String"
+					},
+					{
+						"name": "N�mero",
+						"type": "String"
+					},
+					{
+						"name": "Tipo Comprobante",
+						"type": "String"
+					},
+					{
+						"name": "Descripci�n",
+						"type": "String"
+					},
+					{
+						"name": "D�bito",
+						"type": "String"
+					},
+					{
+						"name": "Cr�dito",
+						"type": "String"
+					},
+					{
+						"name": "Deudor",
+						"type": "String"
+					},
+					{
+						"name": "Acreedor",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DLRegistroFertilizante')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DataLake/DLPROCESOS"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "RegistroFertilizantes.json",
+						"fileSystem": "list"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"odata.etag": {
+							"type": "string"
+						},
+						"ItemInternalId": {
+							"type": "string"
+						},
+						"ID": {
+							"type": "integer"
+						},
+						"Title": {
+							"type": "string"
+						},
+						"Sistema": {
+							"type": "object",
+							"properties": {
+								"odata.type": {
+									"type": "string"
+								},
+								"Id": {
+									"type": "integer"
+								},
+								"Value": {
+									"type": "string"
+								}
+							}
+						},
+						"Sistema#Id": {
+							"type": "integer"
+						},
+						"Estanque": {
+							"type": "object",
+							"properties": {
+								"odata.type": {
+									"type": "string"
+								},
+								"Id": {
+									"type": "integer"
+								},
+								"Value": {
+									"type": "string"
+								}
+							}
+						},
+						"Estanque#Id": {
+							"type": "integer"
+						},
+						"NombreMezcla": {
+							"type": "object",
+							"properties": {
+								"odata.type": {
+									"type": "string"
+								},
+								"Id": {
+									"type": "integer"
+								},
+								"Value": {
+									"type": "string"
+								}
+							}
+						},
+						"NombreMezcla#Id": {
+							"type": "integer"
+						},
+						"LitrosAplicados": {
+							"type": "number"
+						},
+						"FertilizanteAplicado": {
+							"type": "number"
+						},
+						"Modified": {
+							"type": "string"
+						},
+						"Created": {
+							"type": "string"
+						},
+						"Author": {
+							"type": "object",
+							"properties": {
+								"odata.type": {
+									"type": "string"
+								},
+								"Claims": {
+									"type": "string"
+								},
+								"DisplayName": {
+									"type": "string"
+								},
+								"Email": {
+									"type": "null"
+								},
+								"Picture": {
+									"type": "null"
+								},
+								"Department": {
+									"type": "null"
+								},
+								"JobTitle": {
+									"type": "null"
+								}
+							}
+						},
+						"Author#Claims": {
+							"type": "string"
+						},
+						"Editor": {
+							"type": "object",
+							"properties": {
+								"odata.type": {
+									"type": "string"
+								},
+								"Claims": {
+									"type": "string"
+								},
+								"DisplayName": {
+									"type": "string"
+								},
+								"Email": {
+									"type": "null"
+								},
+								"Picture": {
+									"type": "null"
+								},
+								"Department": {
+									"type": "null"
+								},
+								"JobTitle": {
+									"type": "null"
+								}
+							}
+						},
+						"Editor#Claims": {
+							"type": "string"
+						},
+						"Identifier": {
+							"type": "string"
+						},
+						"IsFolder": {
+							"type": "boolean"
+						},
+						"Thumbnail": {
+							"type": "object",
+							"properties": {
+								"Large": {
+									"type": "null"
+								},
+								"Medium": {
+									"type": "null"
+								},
+								"Small": {
+									"type": "null"
+								}
+							}
+						},
+						"Link1": {
+							"type": "string"
+						},
+						"Name": {
+							"type": "string"
+						},
+						"FilenameWithExtension": {
+							"type": "string"
+						},
+						"Path": {
+							"type": "string"
+						},
+						"FullPath": {
+							"type": "string"
+						},
+						"HasAttachments": {
+							"type": "boolean"
+						},
+						"VersionNumber": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DLRiego')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DataLake/DLPROCESOS"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "Riego.csv",
+						"fileSystem": "rpa"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "ï»¿\"Nombre\"",
+						"type": "String"
+					},
+					{
+						"name": "F. Ini",
+						"type": "String"
+					},
+					{
+						"name": "F. Ter",
+						"type": "String"
+					},
+					{
+						"name": "m3 Real",
+						"type": "String"
+					},
+					{
+						"name": "m3 Prg",
+						"type": "String"
+					},
+					{
+						"name": "mm Real",
+						"type": "String"
+					},
+					{
+						"name": "mm Prg",
+						"type": "String"
+					},
+					{
+						"name": "T. Oper",
+						"type": "String"
+					},
+					{
+						"name": "Huerto",
+						"type": "String"
+					},
+					{
+						"name": "Sectores",
+						"type": "String"
+					},
+					{
+						"name": "Fertirrigado",
+						"type": "String"
+					},
+					{
+						"name": "cc1",
+						"type": "String"
+					},
+					{
+						"name": "cc2",
+						"type": "String"
+					},
+					{
+						"name": "cc3",
+						"type": "String"
+					},
+					{
+						"name": "cc4",
+						"type": "String"
+					},
+					{
+						"name": "cc5",
+						"type": "String"
+					},
+					{
+						"name": "cc6",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DLRiego2020')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DataLake/DLPROCESOS"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "Riego2020.csv",
+						"fileSystem": "tablasauxiliares"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "ï»¿\"Nombre\"",
+						"type": "String"
+					},
+					{
+						"name": "F. Ini",
+						"type": "String"
+					},
+					{
+						"name": "F. Ter",
+						"type": "String"
+					},
+					{
+						"name": "m3 Real",
+						"type": "String"
+					},
+					{
+						"name": "m3 Prg",
+						"type": "String"
+					},
+					{
+						"name": "mm Real",
+						"type": "String"
+					},
+					{
+						"name": "mm Prg",
+						"type": "String"
+					},
+					{
+						"name": "T. Oper",
+						"type": "String"
+					},
+					{
+						"name": "Huerto",
+						"type": "String"
+					},
+					{
+						"name": "Sectores",
+						"type": "String"
+					},
+					{
+						"name": "Fertirrigado",
+						"type": "String"
+					},
+					{
+						"name": "cc1",
+						"type": "String"
+					},
+					{
+						"name": "cc2",
+						"type": "String"
+					},
+					{
+						"name": "cc3",
+						"type": "String"
+					},
+					{
+						"name": "cc4",
+						"type": "String"
+					},
+					{
+						"name": "cc5",
+						"type": "String"
+					},
+					{
+						"name": "cc6",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DLWeather')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DataLake/DLPROCESOS"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "Weather.csv",
+						"fileSystem": "rpa"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Date",
+						"type": "String"
+					},
+					{
+						"name": "Temperature (�C)",
+						"type": "String"
+					},
+					{
+						"name": "Minimum Temperature (�C)",
+						"type": "String"
+					},
+					{
+						"name": "Maximum Temperature (�C)",
+						"type": "String"
+					},
+					{
+						"name": "Relative Humidity (%)",
+						"type": "String"
+					},
+					{
+						"name": "Minimum Relative Humidity (%)",
+						"type": "String"
+					},
+					{
+						"name": "Maximum Relative Humidity (%)",
+						"type": "String"
+					},
+					{
+						"name": "Rainfall (mm)",
+						"type": "String"
+					},
+					{
+						"name": "Accumulated Daily Rainfall (mm)",
+						"type": "String"
+					},
+					{
+						"name": "ET0 (mm)",
+						"type": "String"
+					},
+					{
+						"name": "Accumulated ET0 (mm)",
+						"type": "String"
+					},
+					{
+						"name": "Atmospheric Pressure (Pa)",
+						"type": "String"
+					},
+					{
+						"name": "Minimum Atmospheric Pressure (Pa)",
+						"type": "String"
+					},
+					{
+						"name": "Maximum Atmospheric Pressure (Pa)",
+						"type": "String"
+					},
+					{
+						"name": "Average Wind Speed (Km/h)",
+						"type": "String"
+					},
+					{
+						"name": "Prevailing Wind Direction",
+						"type": "String"
+					},
+					{
+						"name": "Solar Radiation (W/m�)",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DWAuxBalance')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DWAqda/Dimensiones"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "Orden",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Visualizacion",
+						"type": "varchar"
+					},
+					{
+						"name": "Relacion",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "AuxVisualizacionBalance"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DWAuxEERR')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DWAqda/Dimensiones"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "Orden",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Visualizacion",
+						"type": "varchar"
+					},
+					{
+						"name": "Relacion",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "AuxVisualizacionEERR"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DWDimCuenta')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DWAqda/Dimensiones"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "idCuentas",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Clasificacion1",
+						"type": "varchar"
+					},
+					{
+						"name": "Clasificacion2",
+						"type": "varchar"
+					},
+					{
+						"name": "Numero",
+						"type": "varchar"
+					},
+					{
+						"name": "Nombre",
+						"type": "varchar"
+					},
+					{
+						"name": "_FechaModificacion",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "_FechaIngreso",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "_Hash",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "DIMCuentas"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DWDimFertilizante')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DWAqda/Dimensiones"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "idDIMFertilizante",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Compuesto",
+						"type": "varchar"
+					},
+					{
+						"name": "Nombre",
+						"type": "varchar"
+					},
+					{
+						"name": "Valor",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "_Hash",
+						"type": "varchar"
+					},
+					{
+						"name": "_FechaModificacion",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "_FechaIngreso",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "DIMFertilizante"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DWDimSector')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DWAqda/Dimensiones"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "idSector",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Nombre",
+						"type": "varchar"
+					},
+					{
+						"name": "Sector",
+						"type": "varchar"
+					},
+					{
+						"name": "Area",
+						"type": "float",
+						"precision": 15
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "DIMSector"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DWThEERR')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DWAqda/Th"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "idThEERR",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "idFecha",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "idMaestroCuenta",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Monto",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "Descripcion",
+						"type": "varchar"
+					},
+					{
+						"name": "NombreTabla",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "ThEERR"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DWThFertilizante')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DWAqda/Th"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "idFertilizante",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Nombre",
+						"type": "varchar"
+					},
+					{
+						"name": "Compuesto",
+						"type": "varchar"
+					},
+					{
+						"name": "Valor",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "Sector",
+						"type": "varchar"
+					},
+					{
+						"name": "NombreSector",
+						"type": "varchar"
+					},
+					{
+						"name": "Area",
+						"type": "float",
+						"precision": 15
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "ThFertilizante"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DWThHarvest')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DWAqda/Th"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "idHarvest",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "idFecha",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Sector",
+						"type": "varchar"
+					},
+					{
+						"name": "n_bins",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "kilos",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "market",
+						"type": "varchar"
+					},
+					{
+						"name": "truck_plate",
+						"type": "varchar"
+					},
+					{
+						"name": "variety",
+						"type": "varchar"
+					},
+					{
+						"name": "internal_guide",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Especie",
+						"type": "varchar"
+					},
+					{
+						"name": "NombreTabla",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "ThHarvest"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DWThRegistroFertilizante')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DWAqda/Th"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "idFertilizanteRegistro",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "idFecha",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Sector",
+						"type": "varchar"
+					},
+					{
+						"name": "Estanque",
+						"type": "varchar"
+					},
+					{
+						"name": "Mezcla",
+						"type": "varchar"
+					},
+					{
+						"name": "TasaAplicada",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "FertilizantAplicado",
+						"type": "float",
+						"precision": 15
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "ThFertilizanteRegistro"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DWThRiego')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DWAqda/Th"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "idRiego",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "idFecha",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "FechaInicio",
+						"type": "date"
+					},
+					{
+						"name": "FechaFin",
+						"type": "date"
+					},
+					{
+						"name": "m3Real",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "TiempoOperacion",
+						"type": "time",
+						"scale": 7
+					},
+					{
+						"name": "Sector",
+						"type": "varchar"
+					},
+					{
+						"name": "NombreTabla",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "ThRiego"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DWThweather')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DWAqda/Th"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "idWeather",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "idFecha",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Lluvia",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "ET0",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "NombreTabla",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "ThWeather"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Especies')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzurePostgreSql1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "POSTGRESQL"
+				},
+				"annotations": [],
+				"type": "AzurePostgreSqlTable",
+				"schema": [
+					{
+						"name": "id",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "name",
+						"type": "character varying",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "created_at",
+						"type": "timestamp without time zone",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "updated_at",
+						"type": "timestamp without time zone",
+						"precision": 0,
+						"scale": 0
+					}
+				],
+				"typeProperties": {
+					"schema": "public",
+					"table": "species"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzurePostgreSql1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SectorMaestra')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzurePostgreSql1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "POSTGRESQL"
+				},
+				"annotations": [],
+				"type": "AzurePostgreSqlTable",
+				"schema": [
+					{
+						"name": "id",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "name",
+						"type": "character varying",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "area",
+						"type": "double precision",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "parent_id",
+						"type": "integer",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "created_at",
+						"type": "timestamp without time zone",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "updated_at",
+						"type": "timestamp without time zone",
+						"precision": 0,
+						"scale": 0
+					}
+				],
+				"typeProperties": {
+					"schema": "public",
+					"table": "sectors"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzurePostgreSql1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/VariedadMaestra')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzurePostgreSql1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "POSTGRESQL"
+				},
+				"annotations": [],
+				"type": "AzurePostgreSqlTable",
+				"schema": [
+					{
+						"name": "id",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "name",
+						"type": "character varying",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "species_id",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "created_at",
+						"type": "timestamp without time zone",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "updated_at",
+						"type": "timestamp without time zone",
+						"precision": 0,
+						"scale": 0
+					}
+				],
+				"typeProperties": {
+					"schema": "public",
+					"table": "varieties"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzurePostgreSql1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureDataLakeStorage1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('AzureDataLakeStorage1_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('AzureDataLakeStorage1_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzurePostgreSql1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzurePostgreSql",
+				"typeProperties": {
+					"connectionString": "[parameters('AzurePostgreSql1_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlDatabase1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureSqlDatabase1_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/EERR')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "FINANCIERO"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DLMayor2020",
+								"type": "DatasetReference"
+							},
+							"name": "Mayores"
+						},
+						{
+							"dataset": {
+								"referenceName": "DLMayor2021",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						},
+						{
+							"dataset": {
+								"referenceName": "DWDimCuenta",
+								"type": "DatasetReference"
+							},
+							"name": "source2"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DWThEERR",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "union"
+						},
+						{
+							"name": "Seleccionar1"
+						},
+						{
+							"name": "Columnaderivada1"
+						},
+						{
+							"name": "Modificarfila1"
+						},
+						{
+							"name": "busquedacuenta"
+						}
+					],
+					"script": "source(output(\n\t\tCuenta as string,\n\t\t{Nombre Cuenta} as string,\n\t\t{Saldo Anterior Deudor} as string,\n\t\t{Saldo Anterior Acreedor} as string,\n\t\tFecha as date 'dd/MM/yyyy',\n\t\t{N�mero} as string,\n\t\t{Tipo Comprobante} as string,\n\t\t{Descripci�n} as string,\n\t\t{D�bito} as string,\n\t\t{Cr�dito} as string,\n\t\tDeudor as string,\n\t\tAcreedor as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> Mayores\nsource(output(\n\t\tCuenta as string,\n\t\t{Nombre Cuenta} as string,\n\t\t{Saldo Anterior Deudor} as string,\n\t\t{Saldo Anterior Acreedor} as string,\n\t\tFecha as date 'dd/MM/yyyy',\n\t\t{N�mero} as string,\n\t\t{Tipo Comprobante} as string,\n\t\t{Descripci�n} as string,\n\t\t{D�bito} as string,\n\t\t{Cr�dito} as string,\n\t\tDeudor as string,\n\t\tAcreedor as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource(output(\n\t\tidCuentas as integer,\n\t\tClasificacion1 as string,\n\t\tClasificacion2 as string,\n\t\tNumero as string,\n\t\tNombre as string,\n\t\t{_FechaModificacion} as timestamp,\n\t\t{_FechaIngreso} as timestamp,\n\t\t{_Hash} as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> source2\nMayores, source1 union(byName: true)~> union\nunion select(mapColumn(\n\t\tCuenta,\n\t\t{Nombre Cuenta},\n\t\t{Saldo Anterior Deudor},\n\t\t{Saldo Anterior Acreedor},\n\t\tFecha,\n\t\t{N�mero},\n\t\t{Tipo Comprobante},\n\t\t{Descripci�n},\n\t\t{D�bito},\n\t\t{Cr�dito},\n\t\tDeudor,\n\t\tAcreedor\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Seleccionar1\nSeleccionar1 derive(saldo = toInteger({Cr�dito})-toInteger({D�bito}),\n\t\tidfecha = year(Fecha)*10000+month(Fecha)*100+dayOfWeek(Fecha),\n\t\tNombreTabla = \"ThEERR\") ~> Columnaderivada1\nbusquedacuenta alterRow(insertIf(true())) ~> Modificarfila1\nColumnaderivada1, source2 lookup(Cuenta == Numero,\n\tmultiple: false,\n\tpickup: 'any',\n\tbroadcast: 'auto')~> busquedacuenta\nModificarfila1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tidThEERR as integer,\n\t\tidFecha as integer,\n\t\tidMaestroCuenta as integer,\n\t\tMonto as long,\n\t\tDescripcion as string,\n\t\tNombreTabla as string\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tpreSQLs:['truncate Table dbo.ThEERR'],\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tidFecha = idfecha,\n\t\tidMaestroCuenta = idCuentas,\n\t\tMonto = saldo,\n\t\tDescripcion = {Descripci�n},\n\t\tNombreTabla\n\t)) ~> sink1"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DLMayor2020')]",
+				"[concat(variables('factoryId'), '/datasets/DLMayor2021')]",
+				"[concat(variables('factoryId'), '/datasets/DWDimCuenta')]",
+				"[concat(variables('factoryId'), '/datasets/DWThEERR')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/FlowDimAuxBalance')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "Dimensiones"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DLDimAuxBalance",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DWAuxBalance",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "Modificarfila1"
+						}
+					],
+					"script": "source(output(\n\t\tOrden as string,\n\t\tVisualizacion as string,\n\t\tRelacion as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 alterRow(insertIf(true())) ~> Modificarfila1\nModificarfila1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tOrden as integer,\n\t\tVisualizacion as string,\n\t\tRelacion as string\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tpreSQLs:['truncate table dbo.AuxVisualizacionBalance'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tOrden,\n\t\tVisualizacion,\n\t\tRelacion\n\t)) ~> sink1"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DLDimAuxBalance')]",
+				"[concat(variables('factoryId'), '/datasets/DWAuxBalance')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/FlowDimAuxEERR')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "Dimensiones"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DLDimAuxEERR",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DWAuxEERR",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "Modificarfila1"
+						}
+					],
+					"script": "source(output(\n\t\tOrden as integer,\n\t\tVisualizacion as string,\n\t\tRelacion as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 alterRow(insertIf(true())) ~> Modificarfila1\nModificarfila1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tOrden as integer,\n\t\tVisualizacion as string,\n\t\tRelacion as string\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tpreSQLs:['truncate table dbo.AuxVisualizacionEERR'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tOrden,\n\t\tVisualizacion,\n\t\tRelacion\n\t)) ~> sink1"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DLDimAuxEERR')]",
+				"[concat(variables('factoryId'), '/datasets/DWAuxEERR')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/FlowDimCuentas')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "Dimensiones"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DLMaestraCuentas",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						},
+						{
+							"dataset": {
+								"referenceName": "DWDimCuenta",
+								"type": "DatasetReference"
+							},
+							"name": "source2"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DWDimCuenta",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "Seleccionar1"
+						},
+						{
+							"name": "Columnaderivada1"
+						},
+						{
+							"name": "Existe1"
+						},
+						{
+							"name": "busqueda"
+						},
+						{
+							"name": "Columnaderivada2"
+						},
+						{
+							"name": "Modificarfila1"
+						}
+					],
+					"script": "source(output(\n\t\t{odata.etag} as string,\n\t\tItemInternalId as string,\n\t\tID as integer,\n\t\tTitle as string,\n\t\tDESCRIPCION as string,\n\t\tCLASIFICACION1 as ({odata.type} as string, Id as integer, Value as string),\n\t\t{CLASIFICACION1#Id} as integer,\n\t\tCLASIFICACION2 as ({odata.type} as string, Id as integer, Value as string),\n\t\t{CLASIFICACION2#Id} as integer,\n\t\tModified as string,\n\t\tCreated as string,\n\t\tAuthor as ({odata.type} as string, Claims as string, DisplayName as string, Email as string, Picture as string, Department as string, JobTitle as string),\n\t\t{Author#Claims} as string,\n\t\tEditor as ({odata.type} as string, Claims as string, DisplayName as string, Email as string, Picture as string, Department as string, JobTitle as string),\n\t\t{Editor#Claims} as string,\n\t\tIdentifier as string,\n\t\tIsFolder as boolean,\n\t\tThumbnail as (Large as string, Medium as string, Small as string),\n\t\tLink1 as string,\n\t\tName as string,\n\t\tFilenameWithExtension as string,\n\t\tPath as string,\n\t\tFullPath as string,\n\t\tHasAttachments as boolean,\n\t\tVersionNumber as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> source1\nsource(output(\n\t\tidCuentas as integer,\n\t\tClasificacion1 as string,\n\t\tClasificacion2 as string,\n\t\tNumero as string,\n\t\tNombre as string,\n\t\t{_FechaModificacion} as timestamp,\n\t\t{_FechaIngreso} as timestamp,\n\t\t{_Hash} as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> source2\nsource1 select(mapColumn(\n\t\tCUENTA = Title,\n\t\tDESCRIPCION,\n\t\tCLASIFICACION1 = CLASIFICACION1.Value,\n\t\tCLASIFICACION2 = CLASIFICACION2.Value\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Seleccionar1\nSeleccionar1 derive(HashCuenta = sha2(256,CUENTA,DESCRIPCION,CLASIFICACION1,CLASIFICACION2),\n\t\tCUENTA = concat(substring(CUENTA,1,1),substring(CUENTA,3,1),substring(CUENTA,5,4),substring(CUENTA,10,2),substring(CUENTA,13,2))) ~> Columnaderivada1\nColumnaderivada1, source2 exists(HashCuenta=={_Hash},\n\tnegate:true,\n\tbroadcast: 'auto')~> Existe1\nExiste1, source2 lookup(CUENTA == Numero,\n\tmultiple: true,\n\tbroadcast: 'auto')~> busqueda\nbusqueda derive(Inserted = iif(isNull({_FechaIngreso}),currentTimestamp(),{_FechaIngreso}),\n\t\tUpdated = currentTimestamp()) ~> Columnaderivada2\nColumnaderivada2 alterRow(upsertIf(true())) ~> Modificarfila1\nModificarfila1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tidCuentas as integer,\n\t\tClasificacion1 as string,\n\t\tClasificacion2 as string,\n\t\tNumero as string,\n\t\tNombre as string,\n\t\t{_FechaModificacion} as timestamp,\n\t\t{_FechaIngreso} as timestamp,\n\t\t{_Hash} as string\n\t),\n\tdeletable:true,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:true,\n\tkeys:['Numero'],\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tClasificacion1 = Seleccionar1@CLASIFICACION1,\n\t\tClasificacion2 = Seleccionar1@CLASIFICACION2,\n\t\tNumero = CUENTA,\n\t\tNombre = DESCRIPCION,\n\t\t{_FechaModificacion} = Updated,\n\t\t{_FechaIngreso} = Inserted,\n\t\t{_Hash} = HashCuenta\n\t)) ~> sink1"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DLMaestraCuentas')]",
+				"[concat(variables('factoryId'), '/datasets/DWDimCuenta')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/FlowDimSec')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "Dimensiones"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DLMaestraSec",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DWDimSector",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "Seleccionar1"
+						},
+						{
+							"name": "Modificarfila1"
+						},
+						{
+							"name": "Columnaderivada1"
+						}
+					],
+					"script": "source(output(\n\t\t{odata.etag} as string,\n\t\tItemInternalId as string,\n\t\tID as integer,\n\t\tTitle as string,\n\t\tSector as string,\n\t\tArea as double,\n\t\tModified as string,\n\t\tCreated as string,\n\t\tAuthor as ({odata.type} as string, Claims as string, DisplayName as string, Email as string, Picture as string, Department as string, JobTitle as string),\n\t\t{Author#Claims} as string,\n\t\tEditor as ({odata.type} as string, Claims as string, DisplayName as string, Email as string, Picture as string, Department as string, JobTitle as string),\n\t\t{Editor#Claims} as string,\n\t\tIdentifier as string,\n\t\tIsFolder as boolean,\n\t\tThumbnail as (Large as string, Medium as string, Small as string),\n\t\tLink1 as string,\n\t\tName as string,\n\t\tFilenameWithExtension as string,\n\t\tPath as string,\n\t\tFullPath as string,\n\t\tHasAttachments as boolean,\n\t\tVersionNumber as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> source1\nsource1 select(mapColumn(\n\t\tTitle,\n\t\tSector,\n\t\tArea\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Seleccionar1\nColumnaderivada1 alterRow(insertIf(true())) ~> Modificarfila1\nSeleccionar1 derive(Area = toFloat(Area)) ~> Columnaderivada1\nModificarfila1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tidSector as integer,\n\t\tNombre as string,\n\t\tSector as string,\n\t\tArea as double\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tpreSQLs:['truncate table dbo.DIMSector'],\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tNombre = Title,\n\t\tSector,\n\t\tArea\n\t)) ~> sink1"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DLMaestraSec')]",
+				"[concat(variables('factoryId'), '/datasets/DWDimSector')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/FlowMaestrafertilizante')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "Dimensiones"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DLFertilizantes",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						},
+						{
+							"dataset": {
+								"referenceName": "DWDimFertilizante",
+								"type": "DatasetReference"
+							},
+							"name": "source2"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DWDimFertilizante",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "Seleccionar1"
+						},
+						{
+							"name": "UnPivot"
+						},
+						{
+							"name": "Columnaderivada1"
+						},
+						{
+							"name": "Existe1"
+						},
+						{
+							"name": "actualizarfecha"
+						},
+						{
+							"name": "Columnaderivada2"
+						},
+						{
+							"name": "Modificarfila1"
+						}
+					],
+					"script": "source(output(\n\t\t{odata.etag} as string,\n\t\tItemInternalId as string,\n\t\tID as integer,\n\t\tTitle as string,\n\t\tN_x0028__x0025_p_x002f_p_x0029_ as double,\n\t\tModified as string,\n\t\tCreated as string,\n\t\tAuthor as ({odata.type} as string, Claims as string, DisplayName as string, Email as string, Picture as string, Department as string, JobTitle as string),\n\t\t{Author#Claims} as string,\n\t\tEditor as ({odata.type} as string, Claims as string, DisplayName as string, Email as string, Picture as string, Department as string, JobTitle as string),\n\t\t{Editor#Claims} as string,\n\t\tIdentifier as string,\n\t\tIsFolder as boolean,\n\t\tThumbnail as (Large as string, Medium as string, Small as string),\n\t\tLink1 as string,\n\t\tName as string,\n\t\tFilenameWithExtension as string,\n\t\tPath as string,\n\t\tFullPath as string,\n\t\tHasAttachments as boolean,\n\t\tVersionNumber as string,\n\t\tK2O_x0028__x0025_p_x002f_p_x0029 as double,\n\t\tP2O5_x0028__x0025_p_x002f_p_x002 as double,\n\t\tB_x0028__x0025_p_x002f_p_x0029_ as double,\n\t\tCaO_x0028__x0025_p_x002f_p_x0029 as double,\n\t\tZn_x0028_NO3_x0029_2_x0028__x002 as double,\n\t\tMgO_x0028__x0025_p_x002f_p_x0029 as double\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> source1\nsource(output(\n\t\tidDIMFertilizante as integer,\n\t\tCompuesto as string,\n\t\tNombre as string,\n\t\tValor as double,\n\t\t{_Hash} as string,\n\t\t{_FechaModificacion} as timestamp,\n\t\t{_FechaIngreso} as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> source2\nsource1 select(mapColumn(\n\t\tNombre = Title,\n\t\tN = N_x0028__x0025_p_x002f_p_x0029_,\n\t\tK2O = K2O_x0028__x0025_p_x002f_p_x0029,\n\t\tP2O5 = P2O5_x0028__x0025_p_x002f_p_x002,\n\t\tB = B_x0028__x0025_p_x002f_p_x0029_,\n\t\tCaO = CaO_x0028__x0025_p_x002f_p_x0029,\n\t\tZn = Zn_x0028_NO3_x0029_2_x0028__x002,\n\t\tMgO = MgO_x0028__x0025_p_x002f_p_x0029\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Seleccionar1\nSeleccionar1 unpivot(output(\n\t\tCompuesto as string,\n\t\tValor as double\n\t),\n\tungroupBy(Nombre),\n\tlateral: false,\n\tignoreNullPivots: false) ~> UnPivot\nUnPivot derive(HashFert = sha2(256,Nombre,Compuesto,Valor)) ~> Columnaderivada1\nColumnaderivada1, source2 exists(HashFert=={_Hash},\n\tnegate:true,\n\tbroadcast: 'auto')~> Existe1\nExiste1, source2 lookup(UnPivot@Nombre == source2@Nombre,\n\tmultiple: true,\n\tbroadcast: 'auto')~> actualizarfecha\nactualizarfecha derive(Inserted = iif(isNull({_FechaIngreso}),currentTimestamp(),{_FechaIngreso}),\n\t\tUpdated = currentTimestamp()) ~> Columnaderivada2\nColumnaderivada2 alterRow(upsertIf(true())) ~> Modificarfila1\nModificarfila1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tidDIMFertilizante as integer,\n\t\tCompuesto as string,\n\t\tNombre as string,\n\t\tValor as double,\n\t\t{_Hash} as string,\n\t\t{_FechaModificacion} as timestamp,\n\t\t{_FechaIngreso} as timestamp\n\t),\n\tdeletable:true,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:true,\n\tkeys:['Nombre'],\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tCompuesto = UnPivot@Compuesto,\n\t\tNombre = UnPivot@Nombre,\n\t\tValor = UnPivot@Valor,\n\t\t{_Hash},\n\t\t{_FechaModificacion},\n\t\t{_FechaIngreso}\n\t)) ~> sink1"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DLFertilizantes')]",
+				"[concat(variables('factoryId'), '/datasets/DWDimFertilizante')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/FlowProduccion')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "PROCESOS"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "AppHarvest",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						},
+						{
+							"dataset": {
+								"referenceName": "SectorMaestra",
+								"type": "DatasetReference"
+							},
+							"name": "SectorMaestraPOST"
+						},
+						{
+							"dataset": {
+								"referenceName": "VariedadMaestra",
+								"type": "DatasetReference"
+							},
+							"name": "VariedadMaestraPOST"
+						},
+						{
+							"dataset": {
+								"referenceName": "Especies",
+								"type": "DatasetReference"
+							},
+							"name": "Especies"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DWThHarvest",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "Seleccionar1"
+						},
+						{
+							"name": "Columnaderivada1"
+						},
+						{
+							"name": "Modificarfila1"
+						},
+						{
+							"name": "Seleccionar2"
+						},
+						{
+							"name": "Sector"
+						},
+						{
+							"name": "especiesMa"
+						},
+						{
+							"name": "Tipo"
+						}
+					],
+					"script": "source(output(\n\t\tid as long,\n\t\tsector_id as long,\n\t\tn_bins as integer,\n\t\tkilos as integer,\n\t\tmarket as string,\n\t\ttruck_plate as string,\n\t\tcreated_at as timestamp,\n\t\tupdated_at as timestamp,\n\t\tdate as date,\n\t\tvariety_id as long,\n\t\tinternal_guide as integer,\n\t\tbuyer_id as long\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> source1\nsource(output(\n\t\tid as long,\n\t\tname as string,\n\t\tarea as double,\n\t\tparent_id as integer,\n\t\tcreated_at as timestamp,\n\t\tupdated_at as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> SectorMaestraPOST\nsource(output(\n\t\tid as long,\n\t\tname as string,\n\t\tspecies_id as long,\n\t\tcreated_at as timestamp,\n\t\tupdated_at as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> VariedadMaestraPOST\nsource(output(\n\t\tid as long,\n\t\tname as string,\n\t\tcreated_at as timestamp,\n\t\tupdated_at as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> Especies\nsource1 select(mapColumn(\n\t\tsector_id,\n\t\tn_bins,\n\t\tkilos,\n\t\tmarket,\n\t\ttruck_plate,\n\t\tdate,\n\t\tvariety_id,\n\t\tinternal_guide,\n\t\tbuyer_id\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Seleccionar1\nSector derive(idFecha = year(date)*10000+month(date)*100+dayOfMonth(date),\n\t\tNombreTabla = 'ThHarvest') ~> Columnaderivada1\nTipo alterRow(insertIf(true())) ~> Modificarfila1\nSectorMaestraPOST select(mapColumn(\n\t\tSector = name,\n\t\tarea,\n\t\tidSector = id\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Seleccionar2\nSeleccionar1, Seleccionar2 lookup(sector_id == idSector,\n\tmultiple: false,\n\tpickup: 'any',\n\tbroadcast: 'auto')~> Sector\nVariedadMaestraPOST, Especies lookup(species_id == Especies@id,\n\tmultiple: false,\n\tpickup: 'any',\n\tbroadcast: 'auto')~> especiesMa\nColumnaderivada1, especiesMa lookup(variety_id == VariedadMaestraPOST@id,\n\tmultiple: false,\n\tpickup: 'any',\n\tbroadcast: 'auto')~> Tipo\nModificarfila1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tidHarvest as integer,\n\t\tidFecha as integer,\n\t\tSector as string,\n\t\tn_bins as integer,\n\t\tkilos as integer,\n\t\tmarket as string,\n\t\ttruck_plate as string,\n\t\tvariety as string,\n\t\tinternal_guide as integer,\n\t\tEspecie as string,\n\t\tNombreTabla as string\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tpreSQLs:['truncate table dbo.ThHarvest'],\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tidFecha,\n\t\tSector,\n\t\tn_bins,\n\t\tkilos,\n\t\tmarket,\n\t\ttruck_plate,\n\t\tvariety = VariedadMaestraPOST@name,\n\t\tinternal_guide,\n\t\tEspecie = Especies@name,\n\t\tNombreTabla\n\t)) ~> sink1"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/AppHarvest')]",
+				"[concat(variables('factoryId'), '/datasets/SectorMaestra')]",
+				"[concat(variables('factoryId'), '/datasets/VariedadMaestra')]",
+				"[concat(variables('factoryId'), '/datasets/Especies')]",
+				"[concat(variables('factoryId'), '/datasets/DWThHarvest')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/FlowRegistroFertilizante')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "PROCESOS"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DLRegistroFertilizante",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DWThRegistroFertilizante",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "Seleccionar1"
+						},
+						{
+							"name": "Columnaderivada1"
+						},
+						{
+							"name": "Modificarfila1"
+						}
+					],
+					"script": "source(output(\n\t\t{odata.etag} as string,\n\t\tItemInternalId as string,\n\t\tID as integer,\n\t\tTitle as string,\n\t\tSistema as ({odata.type} as string, Id as integer, Value as string),\n\t\t{Sistema#Id} as integer,\n\t\tEstanque as ({odata.type} as string, Id as integer, Value as string),\n\t\t{Estanque#Id} as integer,\n\t\tNombreMezcla as ({odata.type} as string, Id as integer, Value as string),\n\t\t{NombreMezcla#Id} as integer,\n\t\tLitrosAplicados as double,\n\t\tFertilizanteAplicado as double,\n\t\tModified as string,\n\t\tCreated as string,\n\t\tAuthor as ({odata.type} as string, Claims as string, DisplayName as string, Email as string, Picture as string, Department as string, JobTitle as string),\n\t\t{Author#Claims} as string,\n\t\tEditor as ({odata.type} as string, Claims as string, DisplayName as string, Email as string, Picture as string, Department as string, JobTitle as string),\n\t\t{Editor#Claims} as string,\n\t\tIdentifier as string,\n\t\tIsFolder as boolean,\n\t\tThumbnail as (Large as string, Medium as string, Small as string),\n\t\tLink1 as string,\n\t\tName as string,\n\t\tFilenameWithExtension as string,\n\t\tPath as string,\n\t\tFullPath as string,\n\t\tHasAttachments as boolean,\n\t\tVersionNumber as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> source1\nsource1 select(mapColumn(\n\t\tFecha = Title,\n\t\tSector = Sistema.Value,\n\t\tEstanque = Estanque.Value,\n\t\tNombreMezcla = NombreMezcla.Value,\n\t\tLitrosAplicadosH = LitrosAplicados,\n\t\tFertilizanteAplicado\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Seleccionar1\nSeleccionar1 derive(idFecha = toInteger(right(Fecha,4))*10000+toInteger(right(left(Fecha,5),2))*100+toInteger(left(Fecha,2))) ~> Columnaderivada1\nColumnaderivada1 alterRow(insertIf(true())) ~> Modificarfila1\nModificarfila1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tidFertilizanteRegistro as integer,\n\t\tidFecha as integer,\n\t\tSector as string,\n\t\tEstanque as string,\n\t\tMezcla as string,\n\t\tTasaAplicada as double,\n\t\tFertilizantAplicado as double\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tpreSQLs:['truncate table dbo.ThFertilizanteRegistro'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tidFecha,\n\t\tSector,\n\t\tEstanque,\n\t\tMezcla = NombreMezcla,\n\t\tTasaAplicada = LitrosAplicadosH,\n\t\tFertilizantAplicado = FertilizanteAplicado\n\t)) ~> sink1"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DLRegistroFertilizante')]",
+				"[concat(variables('factoryId'), '/datasets/DWThRegistroFertilizante')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/FlowRiego')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "PROCESOS"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DLRiego",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						},
+						{
+							"dataset": {
+								"referenceName": "DLRiego2020",
+								"type": "DatasetReference"
+							},
+							"name": "source2"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DWThRiego",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "Seleccionar1"
+						},
+						{
+							"name": "Modificarfila1"
+						},
+						{
+							"name": "Columnaderivada1"
+						},
+						{
+							"name": "union"
+						}
+					],
+					"script": "source(output(\n\t\t{ï»¿\"Nombre\"} as string,\n\t\t{F. Ini} as timestamp 'dd-MM-yyyy',\n\t\t{F. Ter} as timestamp 'dd-MM-yyyy',\n\t\t{m3 Real} as double,\n\t\t{m3 Prg} as string,\n\t\t{mm Real} as string,\n\t\t{mm Prg} as string,\n\t\t{T. Oper} as timestamp 'HH:mm',\n\t\tHuerto as string,\n\t\tSectores as string,\n\t\tFertirrigado as string,\n\t\tcc1 as string,\n\t\tcc2 as string,\n\t\tcc3 as string,\n\t\tcc4 as string,\n\t\tcc5 as string,\n\t\tcc6 as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource(output(\n\t\t{ï»¿\"Nombre\"} as string,\n\t\t{F. Ini} as date 'dd-MM-yyyy',\n\t\t{F. Ter} as date 'dd-MM-yyyy',\n\t\t{m3 Real} as double,\n\t\t{m3 Prg} as string,\n\t\t{mm Real} as string,\n\t\t{mm Prg} as string,\n\t\t{T. Oper} as timestamp 'HH:mm',\n\t\tHuerto as string,\n\t\tSectores as string,\n\t\tFertirrigado as string,\n\t\tcc1 as string,\n\t\tcc2 as string,\n\t\tcc3 as string,\n\t\tcc4 as string,\n\t\tcc5 as string,\n\t\tcc6 as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source2\nunion select(mapColumn(\n\t\tSegmento = {ï»¿\"Nombre\"},\n\t\tFechaInicial = {F. Ini},\n\t\tFechaTermino = {F. Ter},\n\t\tm3Real = {m3 Real},\n\t\t{T. Oper},\n\t\tSectores\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Seleccionar1\nColumnaderivada1 alterRow(insertIf(true())) ~> Modificarfila1\nSeleccionar1 derive(idFecha = year(FechaInicial)*10000+month(FechaInicial)*100+dayOfMonth(FechaInicial),\n\t\tNombreTabla = 'ThRiego') ~> Columnaderivada1\nsource1, source2 union(byName: true)~> union\nModificarfila1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tidRiego as integer,\n\t\tidFecha as integer,\n\t\tFechaInicio as date,\n\t\tFechaFin as date,\n\t\tm3Real as double,\n\t\tTiempoOperacion as timestamp,\n\t\tSector as string,\n\t\tNombreTabla as string\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tpreSQLs:['truncate table dbo.ThRiego'],\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tFechaInicio = FechaInicial,\n\t\tFechaFin = FechaTermino,\n\t\tm3Real,\n\t\tTiempoOperacion = {T. Oper},\n\t\tSector = Segmento,\n\t\tidFecha,\n\t\tNombreTabla\n\t)) ~> sink1"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DLRiego')]",
+				"[concat(variables('factoryId'), '/datasets/DLRiego2020')]",
+				"[concat(variables('factoryId'), '/datasets/DWThRiego')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/FlowThFertilizantes')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "Dimensiones"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DLFertilizantes",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						},
+						{
+							"dataset": {
+								"referenceName": "DLMaestraSec",
+								"type": "DatasetReference"
+							},
+							"name": "source2"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DWThFertilizante",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "Seleccionar1"
+						},
+						{
+							"name": "anulardinamizacion"
+						},
+						{
+							"name": "Modificarfila1"
+						},
+						{
+							"name": "Seleccionar2"
+						},
+						{
+							"name": "Columnaderivada1"
+						},
+						{
+							"name": "combinacion"
+						}
+					],
+					"script": "source(output(\n\t\t{odata.etag} as string,\n\t\tItemInternalId as string,\n\t\tID as integer,\n\t\tTitle as string,\n\t\tN_x0028__x0025_p_x002f_p_x0029_ as double,\n\t\tModified as string,\n\t\tCreated as string,\n\t\tAuthor as ({odata.type} as string, Claims as string, DisplayName as string, Email as string, Picture as string, Department as string, JobTitle as string),\n\t\t{Author#Claims} as string,\n\t\tEditor as ({odata.type} as string, Claims as string, DisplayName as string, Email as string, Picture as string, Department as string, JobTitle as string),\n\t\t{Editor#Claims} as string,\n\t\tIdentifier as string,\n\t\tIsFolder as boolean,\n\t\tThumbnail as (Large as string, Medium as string, Small as string),\n\t\tLink1 as string,\n\t\tName as string,\n\t\tFilenameWithExtension as string,\n\t\tPath as string,\n\t\tFullPath as string,\n\t\tHasAttachments as boolean,\n\t\tVersionNumber as string,\n\t\tK2O_x0028__x0025_p_x002f_p_x0029 as double,\n\t\tP2O5_x0028__x0025_p_x002f_p_x002 as double,\n\t\tB_x0028__x0025_p_x002f_p_x0029_ as double,\n\t\tCaO_x0028__x0025_p_x002f_p_x0029 as double,\n\t\tZn_x0028_NO3_x0029_2_x0028__x002 as double,\n\t\tMgO_x0028__x0025_p_x002f_p_x0029 as double\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> source1\nsource(output(\n\t\t{odata.etag} as string,\n\t\tItemInternalId as string,\n\t\tID as integer,\n\t\tTitle as string,\n\t\tSector as string,\n\t\tArea as double,\n\t\tModified as string,\n\t\tCreated as string,\n\t\tAuthor as ({odata.type} as string, Claims as string, DisplayName as string, Email as string, Picture as string, Department as string, JobTitle as string),\n\t\t{Author#Claims} as string,\n\t\tEditor as ({odata.type} as string, Claims as string, DisplayName as string, Email as string, Picture as string, Department as string, JobTitle as string),\n\t\t{Editor#Claims} as string,\n\t\tIdentifier as string,\n\t\tIsFolder as boolean,\n\t\tThumbnail as (Large as string, Medium as string, Small as string),\n\t\tLink1 as string,\n\t\tName as string,\n\t\tFilenameWithExtension as string,\n\t\tPath as string,\n\t\tFullPath as string,\n\t\tHasAttachments as boolean,\n\t\tVersionNumber as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> source2\nsource1 select(mapColumn(\n\t\tTitle,\n\t\tN = N_x0028__x0025_p_x002f_p_x0029_,\n\t\tK2O = K2O_x0028__x0025_p_x002f_p_x0029,\n\t\tP2O5 = P2O5_x0028__x0025_p_x002f_p_x002,\n\t\tB = B_x0028__x0025_p_x002f_p_x0029_,\n\t\tCaO = CaO_x0028__x0025_p_x002f_p_x0029,\n\t\tZn = Zn_x0028_NO3_x0029_2_x0028__x002,\n\t\tMgO = MgO_x0028__x0025_p_x002f_p_x0029\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Seleccionar1\nSeleccionar1 unpivot(output(\n\t\tCompuesto as string,\n\t\tValor as double\n\t),\n\tungroupBy(Title),\n\tlateral: false,\n\tignoreNullPivots: false) ~> anulardinamizacion\ncombinacion alterRow(insertIf(true())) ~> Modificarfila1\nsource2 select(mapColumn(\n\t\tTitle,\n\t\tSector,\n\t\tArea\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Seleccionar2\nSeleccionar2 derive(Area = toFloat(Area)) ~> Columnaderivada1\nanulardinamizacion, Columnaderivada1 join(true(),\n\tjoinType:'cross',\n\tbroadcast: 'auto')~> combinacion\nModificarfila1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tidFertilizante as integer,\n\t\tNombre as string,\n\t\tCompuesto as string,\n\t\tValor as double,\n\t\tSector as string,\n\t\tNombreSector as string,\n\t\tArea as double\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tpreSQLs:['truncate table dbo.ThFertilizante'],\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tNombre = Title,\n\t\tCompuesto,\n\t\tValor,\n\t\tSector,\n\t\tNombreSector = Seleccionar2@Title,\n\t\tArea\n\t)) ~> sink1"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DLFertilizantes')]",
+				"[concat(variables('factoryId'), '/datasets/DLMaestraSec')]",
+				"[concat(variables('factoryId'), '/datasets/DWThFertilizante')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/FlowWeather')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "PROCESOS"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DLWeather",
+								"type": "DatasetReference"
+							},
+							"name": "Inicio"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DWThweather",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "Seleccionar1"
+						},
+						{
+							"name": "Modificarfila1"
+						},
+						{
+							"name": "Columnaderivada1"
+						}
+					],
+					"script": "source(output(\n\t\tDate as date 'MM-dd-yyyy',\n\t\t{Temperature (�C)} as string,\n\t\t{Minimum Temperature (�C)} as string,\n\t\t{Maximum Temperature (�C)} as string,\n\t\t{Relative Humidity (%)} as string,\n\t\t{Minimum Relative Humidity (%)} as string,\n\t\t{Maximum Relative Humidity (%)} as string,\n\t\t{Rainfall (mm)} as float,\n\t\t{Accumulated Daily Rainfall (mm)} as string,\n\t\t{ET0 (mm)} as float,\n\t\t{Accumulated ET0 (mm)} as string,\n\t\t{Atmospheric Pressure (Pa)} as string,\n\t\t{Minimum Atmospheric Pressure (Pa)} as string,\n\t\t{Maximum Atmospheric Pressure (Pa)} as string,\n\t\t{Average Wind Speed (Km/h)} as string,\n\t\t{Prevailing Wind Direction} as string,\n\t\t{Solar Radiation (W/m�)} as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> Inicio\nInicio select(mapColumn(\n\t\tDate,\n\t\t{Rainfall (mm)},\n\t\t{ET0 (mm)}\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Seleccionar1\nColumnaderivada1 alterRow(insertIf(true())) ~> Modificarfila1\nSeleccionar1 derive(idFecha = year(Date)*10000+month(Date)*100+dayOfMonth(Date),\n\t\tNombreTabla = 'ThWeather') ~> Columnaderivada1\nModificarfila1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tidWeather as integer,\n\t\tidFecha as integer,\n\t\tLluvia as double,\n\t\tET0 as double,\n\t\tNombreTabla as string\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tpreSQLs:['truncate table dbo.ThWeather'],\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tidFecha,\n\t\tLluvia = {Rainfall (mm)},\n\t\tET0 = {ET0 (mm)},\n\t\tNombreTabla\n\t)) ~> sink1"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DLWeather')]",
+				"[concat(variables('factoryId'), '/datasets/DWThweather')]"
+			]
+		}
+	]
+}

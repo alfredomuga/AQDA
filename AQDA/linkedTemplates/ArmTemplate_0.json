@@ -1,0 +1,1705 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Nombre de instancia de Data Factory",
+			"defaultValue": "AQDA"
+		},
+		"AzureDataLakeStorage1_accountKey": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"accountKey\"de \"AzureDataLakeStorage1\""
+		},
+		"AzurePostgreSql1_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"connectionString\"de \"AzurePostgreSql1\""
+		},
+		"AzureSqlDatabase1_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"connectionString\"de \"AzureSqlDatabase1\""
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://aqda.dfs.core.windows.net"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureDataLakeStorage1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('AzureDataLakeStorage1_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('AzureDataLakeStorage1_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzurePostgreSql1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzurePostgreSql",
+				"typeProperties": {
+					"connectionString": "[parameters('AzurePostgreSql1_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlDatabase1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureSqlDatabase1_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AppAssignments')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzurePostgreSql1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "POSTGRESQL"
+				},
+				"annotations": [],
+				"type": "AzurePostgreSqlTable",
+				"schema": [
+					{
+						"name": "id",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "date",
+						"type": "date",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "duration",
+						"type": "integer",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "worker_id",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "sector_id",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "task_id",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "created_at",
+						"type": "timestamp without time zone",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "updated_at",
+						"type": "timestamp without time zone",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "user_id",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					}
+				],
+				"typeProperties": {
+					"schema": "public",
+					"table": "assignments"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzurePostgreSql1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AppHarvest')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzurePostgreSql1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "POSTGRESQL"
+				},
+				"annotations": [],
+				"type": "AzurePostgreSqlTable",
+				"schema": [
+					{
+						"name": "id",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "sector_id",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "n_bins",
+						"type": "integer",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "kilos",
+						"type": "integer",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "market",
+						"type": "character varying",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "truck_plate",
+						"type": "character varying",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "created_at",
+						"type": "timestamp without time zone",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "updated_at",
+						"type": "timestamp without time zone",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "date",
+						"type": "date",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "variety_id",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "internal_guide",
+						"type": "integer",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "buyer_id",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					}
+				],
+				"typeProperties": {
+					"schema": "public",
+					"table": "harvests"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzurePostgreSql1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DLDimAuxBalance')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DataLake/DIMENSIONES"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "Hoja1",
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "AUXBALANCE.xlsx",
+						"fileSystem": "tablasauxiliares"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": [
+					{
+						"name": "Orden",
+						"type": "String"
+					},
+					{
+						"name": "Visualizacion",
+						"type": "String"
+					},
+					{
+						"name": "Relacion",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DLDimAuxEERR')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DataLake/DIMENSIONES"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "Hoja1",
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "AUXEERR.xlsx",
+						"fileSystem": "tablasauxiliares"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": [
+					{
+						"name": "Orden",
+						"type": "String"
+					},
+					{
+						"name": "Visualizacion",
+						"type": "String"
+					},
+					{
+						"name": "Relacion",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DLFertilizantes')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DataLake/DLPROCESOS"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "Fertilizantes.json",
+						"fileSystem": "list"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"odata.etag": {
+							"type": "string"
+						},
+						"ItemInternalId": {
+							"type": "string"
+						},
+						"ID": {
+							"type": "integer"
+						},
+						"Title": {
+							"type": "string"
+						},
+						"N_x0028__x0025_p_x002f_p_x0029_": {
+							"type": "number"
+						},
+						"Modified": {
+							"type": "string"
+						},
+						"Created": {
+							"type": "string"
+						},
+						"Author": {
+							"type": "object",
+							"properties": {
+								"odata.type": {
+									"type": "string"
+								},
+								"Claims": {
+									"type": "string"
+								},
+								"DisplayName": {
+									"type": "string"
+								},
+								"Email": {
+									"type": "null"
+								},
+								"Picture": {
+									"type": "null"
+								},
+								"Department": {
+									"type": "null"
+								},
+								"JobTitle": {
+									"type": "null"
+								}
+							}
+						},
+						"Author#Claims": {
+							"type": "string"
+						},
+						"Editor": {
+							"type": "object",
+							"properties": {
+								"odata.type": {
+									"type": "string"
+								},
+								"Claims": {
+									"type": "string"
+								},
+								"DisplayName": {
+									"type": "string"
+								},
+								"Email": {
+									"type": "string"
+								},
+								"Picture": {
+									"type": "string"
+								},
+								"Department": {
+									"type": "null"
+								},
+								"JobTitle": {
+									"type": "null"
+								}
+							}
+						},
+						"Editor#Claims": {
+							"type": "string"
+						},
+						"Identifier": {
+							"type": "string"
+						},
+						"IsFolder": {
+							"type": "boolean"
+						},
+						"Thumbnail": {
+							"type": "object",
+							"properties": {
+								"Large": {
+									"type": "null"
+								},
+								"Medium": {
+									"type": "null"
+								},
+								"Small": {
+									"type": "null"
+								}
+							}
+						},
+						"Link1": {
+							"type": "string"
+						},
+						"Name": {
+							"type": "string"
+						},
+						"FilenameWithExtension": {
+							"type": "string"
+						},
+						"Path": {
+							"type": "string"
+						},
+						"FullPath": {
+							"type": "string"
+						},
+						"HasAttachments": {
+							"type": "boolean"
+						},
+						"VersionNumber": {
+							"type": "string"
+						},
+						"K2O_x0028__x0025_p_x002f_p_x0029": {
+							"type": "number"
+						},
+						"P2O5_x0028__x0025_p_x002f_p_x002": {
+							"type": "number"
+						},
+						"B_x0028__x0025_p_x002f_p_x0029_": {
+							"type": "number"
+						},
+						"CaO_x0028__x0025_p_x002f_p_x0029": {
+							"type": "number"
+						},
+						"Zn_x0028_NO3_x0029_2_x0028__x002": {
+							"type": "number"
+						},
+						"MgO_x0028__x0025_p_x002f_p_x0029": {
+							"type": "number"
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DLMaestraCuentas')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DataLake/DIMENSIONES"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "MaestraDeCuenta.json",
+						"fileSystem": "list"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"odata.etag": {
+							"type": "string"
+						},
+						"ItemInternalId": {
+							"type": "string"
+						},
+						"ID": {
+							"type": "integer"
+						},
+						"Title": {
+							"type": "string"
+						},
+						"DESCRIPCION": {
+							"type": "string"
+						},
+						"CLASIFICACION1": {
+							"type": "object",
+							"properties": {
+								"odata.type": {
+									"type": "string"
+								},
+								"Id": {
+									"type": "integer"
+								},
+								"Value": {
+									"type": "string"
+								}
+							}
+						},
+						"CLASIFICACION1#Id": {
+							"type": "integer"
+						},
+						"CLASIFICACION2": {
+							"type": "object",
+							"properties": {
+								"odata.type": {
+									"type": "string"
+								},
+								"Id": {
+									"type": "integer"
+								},
+								"Value": {
+									"type": "string"
+								}
+							}
+						},
+						"CLASIFICACION2#Id": {
+							"type": "integer"
+						},
+						"Modified": {
+							"type": "string"
+						},
+						"Created": {
+							"type": "string"
+						},
+						"Author": {
+							"type": "object",
+							"properties": {
+								"odata.type": {
+									"type": "string"
+								},
+								"Claims": {
+									"type": "string"
+								},
+								"DisplayName": {
+									"type": "string"
+								},
+								"Email": {
+									"type": "null"
+								},
+								"Picture": {
+									"type": "null"
+								},
+								"Department": {
+									"type": "null"
+								},
+								"JobTitle": {
+									"type": "null"
+								}
+							}
+						},
+						"Author#Claims": {
+							"type": "string"
+						},
+						"Editor": {
+							"type": "object",
+							"properties": {
+								"odata.type": {
+									"type": "string"
+								},
+								"Claims": {
+									"type": "string"
+								},
+								"DisplayName": {
+									"type": "string"
+								},
+								"Email": {
+									"type": "null"
+								},
+								"Picture": {
+									"type": "null"
+								},
+								"Department": {
+									"type": "null"
+								},
+								"JobTitle": {
+									"type": "null"
+								}
+							}
+						},
+						"Editor#Claims": {
+							"type": "string"
+						},
+						"Identifier": {
+							"type": "string"
+						},
+						"IsFolder": {
+							"type": "boolean"
+						},
+						"Thumbnail": {
+							"type": "object",
+							"properties": {
+								"Large": {
+									"type": "null"
+								},
+								"Medium": {
+									"type": "null"
+								},
+								"Small": {
+									"type": "null"
+								}
+							}
+						},
+						"Link1": {
+							"type": "string"
+						},
+						"Name": {
+							"type": "string"
+						},
+						"FilenameWithExtension": {
+							"type": "string"
+						},
+						"Path": {
+							"type": "string"
+						},
+						"FullPath": {
+							"type": "string"
+						},
+						"HasAttachments": {
+							"type": "boolean"
+						},
+						"VersionNumber": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DLMaestraSec')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DataLake/DLPROCESOS"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "Presentacion de Campo.json",
+						"fileSystem": "list"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"odata.etag": {
+							"type": "string"
+						},
+						"ItemInternalId": {
+							"type": "string"
+						},
+						"ID": {
+							"type": "integer"
+						},
+						"Title": {
+							"type": "string"
+						},
+						"Sector": {
+							"type": "string"
+						},
+						"Area": {
+							"type": "number"
+						},
+						"Modified": {
+							"type": "string"
+						},
+						"Created": {
+							"type": "string"
+						},
+						"Author": {
+							"type": "object",
+							"properties": {
+								"odata.type": {
+									"type": "string"
+								},
+								"Claims": {
+									"type": "string"
+								},
+								"DisplayName": {
+									"type": "string"
+								},
+								"Email": {
+									"type": "null"
+								},
+								"Picture": {
+									"type": "null"
+								},
+								"Department": {
+									"type": "null"
+								},
+								"JobTitle": {
+									"type": "null"
+								}
+							}
+						},
+						"Author#Claims": {
+							"type": "string"
+						},
+						"Editor": {
+							"type": "object",
+							"properties": {
+								"odata.type": {
+									"type": "string"
+								},
+								"Claims": {
+									"type": "string"
+								},
+								"DisplayName": {
+									"type": "string"
+								},
+								"Email": {
+									"type": "null"
+								},
+								"Picture": {
+									"type": "null"
+								},
+								"Department": {
+									"type": "null"
+								},
+								"JobTitle": {
+									"type": "null"
+								}
+							}
+						},
+						"Editor#Claims": {
+							"type": "string"
+						},
+						"Identifier": {
+							"type": "string"
+						},
+						"IsFolder": {
+							"type": "boolean"
+						},
+						"Thumbnail": {
+							"type": "object",
+							"properties": {
+								"Large": {
+									"type": "null"
+								},
+								"Medium": {
+									"type": "null"
+								},
+								"Small": {
+									"type": "null"
+								}
+							}
+						},
+						"Link1": {
+							"type": "string"
+						},
+						"Name": {
+							"type": "string"
+						},
+						"FilenameWithExtension": {
+							"type": "string"
+						},
+						"Path": {
+							"type": "string"
+						},
+						"FullPath": {
+							"type": "string"
+						},
+						"HasAttachments": {
+							"type": "boolean"
+						},
+						"VersionNumber": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DLMayor2020')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DataLake/DLFINANCIERO"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "LibroMayor2020.CSV",
+						"fileSystem": "rpa"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Cuenta",
+						"type": "String"
+					},
+					{
+						"name": "Nombre Cuenta",
+						"type": "String"
+					},
+					{
+						"name": "Saldo Anterior Deudor",
+						"type": "String"
+					},
+					{
+						"name": "Saldo Anterior Acreedor",
+						"type": "String"
+					},
+					{
+						"name": "Fecha",
+						"type": "String"
+					},
+					{
+						"name": "N�mero",
+						"type": "String"
+					},
+					{
+						"name": "Tipo Comprobante",
+						"type": "String"
+					},
+					{
+						"name": "Descripci�n",
+						"type": "String"
+					},
+					{
+						"name": "D�bito",
+						"type": "String"
+					},
+					{
+						"name": "Cr�dito",
+						"type": "String"
+					},
+					{
+						"name": "Deudor",
+						"type": "String"
+					},
+					{
+						"name": "Acreedor",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DLMayor2021')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DataLake/DLFINANCIERO"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "LibroMayor2021.CSV",
+						"fileSystem": "rpa"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Cuenta",
+						"type": "String"
+					},
+					{
+						"name": "Nombre Cuenta",
+						"type": "String"
+					},
+					{
+						"name": "Saldo Anterior Deudor",
+						"type": "String"
+					},
+					{
+						"name": "Saldo Anterior Acreedor",
+						"type": "String"
+					},
+					{
+						"name": "Fecha",
+						"type": "String"
+					},
+					{
+						"name": "N�mero",
+						"type": "String"
+					},
+					{
+						"name": "Tipo Comprobante",
+						"type": "String"
+					},
+					{
+						"name": "Descripci�n",
+						"type": "String"
+					},
+					{
+						"name": "D�bito",
+						"type": "String"
+					},
+					{
+						"name": "Cr�dito",
+						"type": "String"
+					},
+					{
+						"name": "Deudor",
+						"type": "String"
+					},
+					{
+						"name": "Acreedor",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DLRegistroFertilizante')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DataLake/DLPROCESOS"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "RegistroFertilizantes.json",
+						"fileSystem": "list"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"odata.etag": {
+							"type": "string"
+						},
+						"ItemInternalId": {
+							"type": "string"
+						},
+						"ID": {
+							"type": "integer"
+						},
+						"Title": {
+							"type": "string"
+						},
+						"Sistema": {
+							"type": "object",
+							"properties": {
+								"odata.type": {
+									"type": "string"
+								},
+								"Id": {
+									"type": "integer"
+								},
+								"Value": {
+									"type": "string"
+								}
+							}
+						},
+						"Sistema#Id": {
+							"type": "integer"
+						},
+						"Estanque": {
+							"type": "object",
+							"properties": {
+								"odata.type": {
+									"type": "string"
+								},
+								"Id": {
+									"type": "integer"
+								},
+								"Value": {
+									"type": "string"
+								}
+							}
+						},
+						"Estanque#Id": {
+							"type": "integer"
+						},
+						"NombreMezcla": {
+							"type": "object",
+							"properties": {
+								"odata.type": {
+									"type": "string"
+								},
+								"Id": {
+									"type": "integer"
+								},
+								"Value": {
+									"type": "string"
+								}
+							}
+						},
+						"NombreMezcla#Id": {
+							"type": "integer"
+						},
+						"LitrosAplicados": {
+							"type": "number"
+						},
+						"FertilizanteAplicado": {
+							"type": "number"
+						},
+						"Modified": {
+							"type": "string"
+						},
+						"Created": {
+							"type": "string"
+						},
+						"Author": {
+							"type": "object",
+							"properties": {
+								"odata.type": {
+									"type": "string"
+								},
+								"Claims": {
+									"type": "string"
+								},
+								"DisplayName": {
+									"type": "string"
+								},
+								"Email": {
+									"type": "null"
+								},
+								"Picture": {
+									"type": "null"
+								},
+								"Department": {
+									"type": "null"
+								},
+								"JobTitle": {
+									"type": "null"
+								}
+							}
+						},
+						"Author#Claims": {
+							"type": "string"
+						},
+						"Editor": {
+							"type": "object",
+							"properties": {
+								"odata.type": {
+									"type": "string"
+								},
+								"Claims": {
+									"type": "string"
+								},
+								"DisplayName": {
+									"type": "string"
+								},
+								"Email": {
+									"type": "null"
+								},
+								"Picture": {
+									"type": "null"
+								},
+								"Department": {
+									"type": "null"
+								},
+								"JobTitle": {
+									"type": "null"
+								}
+							}
+						},
+						"Editor#Claims": {
+							"type": "string"
+						},
+						"Identifier": {
+							"type": "string"
+						},
+						"IsFolder": {
+							"type": "boolean"
+						},
+						"Thumbnail": {
+							"type": "object",
+							"properties": {
+								"Large": {
+									"type": "null"
+								},
+								"Medium": {
+									"type": "null"
+								},
+								"Small": {
+									"type": "null"
+								}
+							}
+						},
+						"Link1": {
+							"type": "string"
+						},
+						"Name": {
+							"type": "string"
+						},
+						"FilenameWithExtension": {
+							"type": "string"
+						},
+						"Path": {
+							"type": "string"
+						},
+						"FullPath": {
+							"type": "string"
+						},
+						"HasAttachments": {
+							"type": "boolean"
+						},
+						"VersionNumber": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DLRiego')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DataLake/DLPROCESOS"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "Riego.csv",
+						"fileSystem": "rpa"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "ï»¿\"Nombre\"",
+						"type": "String"
+					},
+					{
+						"name": "F. Ini",
+						"type": "String"
+					},
+					{
+						"name": "F. Ter",
+						"type": "String"
+					},
+					{
+						"name": "m3 Real",
+						"type": "String"
+					},
+					{
+						"name": "m3 Prg",
+						"type": "String"
+					},
+					{
+						"name": "mm Real",
+						"type": "String"
+					},
+					{
+						"name": "mm Prg",
+						"type": "String"
+					},
+					{
+						"name": "T. Oper",
+						"type": "String"
+					},
+					{
+						"name": "Huerto",
+						"type": "String"
+					},
+					{
+						"name": "Sectores",
+						"type": "String"
+					},
+					{
+						"name": "Fertirrigado",
+						"type": "String"
+					},
+					{
+						"name": "cc1",
+						"type": "String"
+					},
+					{
+						"name": "cc2",
+						"type": "String"
+					},
+					{
+						"name": "cc3",
+						"type": "String"
+					},
+					{
+						"name": "cc4",
+						"type": "String"
+					},
+					{
+						"name": "cc5",
+						"type": "String"
+					},
+					{
+						"name": "cc6",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DLRiego2020')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DataLake/DLPROCESOS"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "Riego2020.csv",
+						"fileSystem": "tablasauxiliares"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "ï»¿\"Nombre\"",
+						"type": "String"
+					},
+					{
+						"name": "F. Ini",
+						"type": "String"
+					},
+					{
+						"name": "F. Ter",
+						"type": "String"
+					},
+					{
+						"name": "m3 Real",
+						"type": "String"
+					},
+					{
+						"name": "m3 Prg",
+						"type": "String"
+					},
+					{
+						"name": "mm Real",
+						"type": "String"
+					},
+					{
+						"name": "mm Prg",
+						"type": "String"
+					},
+					{
+						"name": "T. Oper",
+						"type": "String"
+					},
+					{
+						"name": "Huerto",
+						"type": "String"
+					},
+					{
+						"name": "Sectores",
+						"type": "String"
+					},
+					{
+						"name": "Fertirrigado",
+						"type": "String"
+					},
+					{
+						"name": "cc1",
+						"type": "String"
+					},
+					{
+						"name": "cc2",
+						"type": "String"
+					},
+					{
+						"name": "cc3",
+						"type": "String"
+					},
+					{
+						"name": "cc4",
+						"type": "String"
+					},
+					{
+						"name": "cc5",
+						"type": "String"
+					},
+					{
+						"name": "cc6",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DLWeather')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DataLake/DLPROCESOS"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "Weather.csv",
+						"fileSystem": "rpa"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Date",
+						"type": "String"
+					},
+					{
+						"name": "Temperature (�C)",
+						"type": "String"
+					},
+					{
+						"name": "Minimum Temperature (�C)",
+						"type": "String"
+					},
+					{
+						"name": "Maximum Temperature (�C)",
+						"type": "String"
+					},
+					{
+						"name": "Relative Humidity (%)",
+						"type": "String"
+					},
+					{
+						"name": "Minimum Relative Humidity (%)",
+						"type": "String"
+					},
+					{
+						"name": "Maximum Relative Humidity (%)",
+						"type": "String"
+					},
+					{
+						"name": "Rainfall (mm)",
+						"type": "String"
+					},
+					{
+						"name": "Accumulated Daily Rainfall (mm)",
+						"type": "String"
+					},
+					{
+						"name": "ET0 (mm)",
+						"type": "String"
+					},
+					{
+						"name": "Accumulated ET0 (mm)",
+						"type": "String"
+					},
+					{
+						"name": "Atmospheric Pressure (Pa)",
+						"type": "String"
+					},
+					{
+						"name": "Minimum Atmospheric Pressure (Pa)",
+						"type": "String"
+					},
+					{
+						"name": "Maximum Atmospheric Pressure (Pa)",
+						"type": "String"
+					},
+					{
+						"name": "Average Wind Speed (Km/h)",
+						"type": "String"
+					},
+					{
+						"name": "Prevailing Wind Direction",
+						"type": "String"
+					},
+					{
+						"name": "Solar Radiation (W/m�)",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DWAuxBalance')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DWAqda/Dimensiones"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "Orden",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Visualizacion",
+						"type": "varchar"
+					},
+					{
+						"name": "Relacion",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "AuxVisualizacionBalance"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DWAuxEERR')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DWAqda/Dimensiones"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "Orden",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Visualizacion",
+						"type": "varchar"
+					},
+					{
+						"name": "Relacion",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "AuxVisualizacionEERR"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DWDimCuenta')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DWAqda/Dimensiones"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "idCuentas",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Clasificacion1",
+						"type": "varchar"
+					},
+					{
+						"name": "Clasificacion2",
+						"type": "varchar"
+					},
+					{
+						"name": "Numero",
+						"type": "varchar"
+					},
+					{
+						"name": "Nombre",
+						"type": "varchar"
+					},
+					{
+						"name": "_FechaModificacion",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "_FechaIngreso",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "_Hash",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "DIMCuentas"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DWDimFertilizante')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DWAqda/Dimensiones"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "idDIMFertilizante",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Compuesto",
+						"type": "varchar"
+					},
+					{
+						"name": "Nombre",
+						"type": "varchar"
+					},
+					{
+						"name": "Valor",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "_Hash",
+						"type": "varchar"
+					},
+					{
+						"name": "_FechaModificacion",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "_FechaIngreso",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "DIMFertilizante"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase1')]"
+			]
+		}
+	]
+}
