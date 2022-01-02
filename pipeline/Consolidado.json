@@ -36,6 +36,12 @@
 				}
 			}
 		],
+		"parameters": {
+			"auto": {
+				"type": "string",
+				"defaultValue": "@TREEGER().startTime"
+			}
+		},
 		"annotations": []
 	}
 }
