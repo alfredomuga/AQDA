@@ -9,14 +9,14 @@
 			"recurrence": {
 				"frequency": "Week",
 				"interval": 1,
-				"startTime": "2022-01-02T02:01:00Z",
-				"timeZone": "UTC",
+				"startTime": "2021-10-29T18:35:00",
+				"timeZone": "Pacific SA Standard Time",
 				"schedule": {
 					"minutes": [
 						0
 					],
 					"hours": [
-						6
+						8
 					],
 					"weekDays": [
 						"Monday",
