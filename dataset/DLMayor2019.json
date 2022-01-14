@@ -1,0 +1,75 @@
+{
+	"name": "DLMayor2019",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "DataLake/DLFINANCIERO"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "LibroMayor2019.CSV",
+				"fileSystem": "rpa"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Cuenta",
+				"type": "String"
+			},
+			{
+				"name": "Nombre Cuenta",
+				"type": "String"
+			},
+			{
+				"name": "Saldo Anterior Deudor",
+				"type": "String"
+			},
+			{
+				"name": "Saldo Anterior Acreedor",
+				"type": "String"
+			},
+			{
+				"name": "Fecha",
+				"type": "String"
+			},
+			{
+				"name": "N�mero",
+				"type": "String"
+			},
+			{
+				"name": "Tipo Comprobante",
+				"type": "String"
+			},
+			{
+				"name": "Descripci�n",
+				"type": "String"
+			},
+			{
+				"name": "D�bito",
+				"type": "String"
+			},
+			{
+				"name": "Cr�dito",
+				"type": "String"
+			},
+			{
+				"name": "Deudor",
+				"type": "String"
+			},
+			{
+				"name": "Acreedor",
+				"type": "String"
+			}
+		]
+	}
+}
