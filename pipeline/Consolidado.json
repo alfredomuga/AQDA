@@ -34,6 +34,30 @@
 					},
 					"waitOnCompletion": true
 				}
+			},
+			{
+				"name": "Web1",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "TH",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-21.eastus.logic.azure.com:443/workflows/b743b7709cfd488db13abe6c3ada08ae/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=gWaiSGLPZyUp8SmLm_vaAeVG-JjIwZD3XLJzkDuT20M",
+					"method": "GET"
+				}
 			}
 		],
 		"annotations": []
