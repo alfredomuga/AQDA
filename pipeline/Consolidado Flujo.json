@@ -1,0 +1,41 @@
+{
+	"name": "Consolidado Flujo",
+	"properties": {
+		"activities": [
+			{
+				"name": "dimensiones",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "0Dim",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Th Tablas",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "dimensiones",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "1Th",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"annotations": []
+	}
+}
