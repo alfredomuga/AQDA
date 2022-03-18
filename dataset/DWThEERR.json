@@ -38,6 +38,10 @@
 			{
 				"name": "NombreTabla",
 				"type": "varchar"
+			},
+			{
+				"name": "CuentaSIN",
+				"type": "varchar"
 			}
 		],
 		"typeProperties": {
