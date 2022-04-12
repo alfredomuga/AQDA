@@ -212,6 +212,10 @@
 					{
 						"name": "NombreTabla",
 						"type": "varchar"
+					},
+					{
+						"name": "CuentaSIN",
+						"type": "varchar"
 					}
 				],
 				"typeProperties": {
@@ -668,6 +672,104 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/DLRiego2021')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DataLake/DLPROCESOS"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "Riego2021.csv",
+						"fileSystem": "tablasauxiliares"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "ï»¿\"Nombre\"",
+						"type": "String"
+					},
+					{
+						"name": "F. Ini",
+						"type": "String"
+					},
+					{
+						"name": "F. Ter",
+						"type": "String"
+					},
+					{
+						"name": "m3 Real",
+						"type": "String"
+					},
+					{
+						"name": "m3 Prg",
+						"type": "String"
+					},
+					{
+						"name": "mm Real",
+						"type": "String"
+					},
+					{
+						"name": "mm Prg",
+						"type": "String"
+					},
+					{
+						"name": "T. Oper",
+						"type": "String"
+					},
+					{
+						"name": "Huerto",
+						"type": "String"
+					},
+					{
+						"name": "Sectores",
+						"type": "String"
+					},
+					{
+						"name": "Fertirrigado",
+						"type": "String"
+					},
+					{
+						"name": "cc1",
+						"type": "String"
+					},
+					{
+						"name": "cc2",
+						"type": "String"
+					},
+					{
+						"name": "cc3",
+						"type": "String"
+					},
+					{
+						"name": "cc4",
+						"type": "String"
+					},
+					{
+						"name": "cc5",
+						"type": "String"
+					},
+					{
+						"name": "cc6",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/EERR')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
@@ -740,7 +842,7 @@
 							"name": "busquedacuenta"
 						}
 					],
-					"script": "source(output(\n\t\tCuenta as string,\n\t\t{Nombre Cuenta} as string,\n\t\t{Saldo Anterior Deudor} as string,\n\t\t{Saldo Anterior Acreedor} as string,\n\t\tFecha as date 'dd/MM/yyyy',\n\t\t{N�mero} as string,\n\t\t{Tipo Comprobante} as string,\n\t\t{Descripci�n} as string,\n\t\t{D�bito} as string,\n\t\t{Cr�dito} as string,\n\t\tDeudor as string,\n\t\tAcreedor as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> Mayores\nsource(output(\n\t\tCuenta as string,\n\t\t{Nombre Cuenta} as string,\n\t\t{Saldo Anterior Deudor} as string,\n\t\t{Saldo Anterior Acreedor} as string,\n\t\tFecha as date 'dd/MM/yyyy',\n\t\t{N�mero} as string,\n\t\t{Tipo Comprobante} as string,\n\t\t{Descripci�n} as string,\n\t\t{D�bito} as string,\n\t\t{Cr�dito} as string,\n\t\tDeudor as string,\n\t\tAcreedor as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource(output(\n\t\tidCuentas as integer,\n\t\tClasificacion1 as string,\n\t\tClasificacion2 as string,\n\t\tNumero as string,\n\t\tNombre as string,\n\t\t{_FechaModificacion} as timestamp,\n\t\t{_FechaIngreso} as timestamp,\n\t\t{_Hash} as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> source2\nsource(output(\n\t\tCuenta as string,\n\t\t{Nombre Cuenta} as string,\n\t\t{Saldo Anterior Deudor} as string,\n\t\t{Saldo Anterior Acreedor} as string,\n\t\tFecha as date 'dd/MM/yyyy',\n\t\t{N�mero} as string,\n\t\t{Tipo Comprobante} as string,\n\t\t{Descripci�n} as string,\n\t\t{D�bito} as string,\n\t\t{Cr�dito} as string,\n\t\tDeudor as string,\n\t\tAcreedor as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source3\nsource(output(\n\t\tCuenta as string,\n\t\t{Nombre Cuenta} as string,\n\t\t{Saldo Anterior Deudor} as string,\n\t\t{Saldo Anterior Acreedor} as string,\n\t\tFecha as date 'dd/MM/yyyy',\n\t\t{N�mero} as string,\n\t\t{Tipo Comprobante} as string,\n\t\t{Descripci�n} as string,\n\t\t{D�bito} as string,\n\t\t{Cr�dito} as string,\n\t\tDeudor as string,\n\t\tAcreedor as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source4\nMayores, source1, source3, source4 union(byName: true)~> union\nunion select(mapColumn(\n\t\tCuenta,\n\t\t{Nombre Cuenta},\n\t\t{Saldo Anterior Deudor},\n\t\t{Saldo Anterior Acreedor},\n\t\tFecha,\n\t\t{N�mero},\n\t\t{Tipo Comprobante},\n\t\t{Descripci�n},\n\t\t{D�bito},\n\t\t{Cr�dito},\n\t\tDeudor,\n\t\tAcreedor\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Seleccionar1\nSeleccionar1 derive(saldo = toInteger({Cr�dito})-toInteger({D�bito}),\n\t\tidfecha = year(Fecha)*10000+month(Fecha)*100+dayOfWeek(Fecha),\n\t\tNombreTabla = \"ThEERR\") ~> Columnaderivada1\nbusquedacuenta alterRow(insertIf(true())) ~> Modificarfila1\nColumnaderivada1, source2 lookup(Cuenta == Numero,\n\tmultiple: false,\n\tpickup: 'any',\n\tbroadcast: 'auto')~> busquedacuenta\nModificarfila1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tidThEERR as integer,\n\t\tidFecha as integer,\n\t\tidMaestroCuenta as integer,\n\t\tMonto as long,\n\t\tDescripcion as string,\n\t\tNombreTabla as string\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tpreSQLs:['truncate Table dbo.ThEERR'],\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tidFecha = idfecha,\n\t\tidMaestroCuenta = idCuentas,\n\t\tMonto = saldo,\n\t\tDescripcion = {Descripci�n},\n\t\tNombreTabla\n\t)) ~> sink1"
+					"script": "source(output(\n\t\tCuenta as string,\n\t\t{Nombre Cuenta} as string,\n\t\t{Saldo Anterior Deudor} as string,\n\t\t{Saldo Anterior Acreedor} as string,\n\t\tFecha as date 'dd/MM/yyyy',\n\t\t{N�mero} as string,\n\t\t{Tipo Comprobante} as string,\n\t\t{Descripci�n} as string,\n\t\t{D�bito} as string,\n\t\t{Cr�dito} as string,\n\t\tDeudor as string,\n\t\tAcreedor as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> Mayores\nsource(output(\n\t\tCuenta as string,\n\t\t{Nombre Cuenta} as string,\n\t\t{Saldo Anterior Deudor} as string,\n\t\t{Saldo Anterior Acreedor} as string,\n\t\tFecha as date 'dd/MM/yyyy',\n\t\t{N�mero} as string,\n\t\t{Tipo Comprobante} as string,\n\t\t{Descripci�n} as string,\n\t\t{D�bito} as string,\n\t\t{Cr�dito} as string,\n\t\tDeudor as string,\n\t\tAcreedor as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource(output(\n\t\tidCuentas as integer,\n\t\tClasificacion1 as string,\n\t\tClasificacion2 as string,\n\t\tNumero as string,\n\t\tNombre as string,\n\t\t{_FechaModificacion} as timestamp,\n\t\t{_FechaIngreso} as timestamp,\n\t\t{_Hash} as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> source2\nsource(output(\n\t\tCuenta as string,\n\t\t{Nombre Cuenta} as string,\n\t\t{Saldo Anterior Deudor} as string,\n\t\t{Saldo Anterior Acreedor} as string,\n\t\tFecha as date 'dd/MM/yyyy',\n\t\t{N�mero} as string,\n\t\t{Tipo Comprobante} as string,\n\t\t{Descripci�n} as string,\n\t\t{D�bito} as string,\n\t\t{Cr�dito} as string,\n\t\tDeudor as string,\n\t\tAcreedor as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source3\nsource(output(\n\t\tCuenta as string,\n\t\t{Nombre Cuenta} as string,\n\t\t{Saldo Anterior Deudor} as string,\n\t\t{Saldo Anterior Acreedor} as string,\n\t\tFecha as date 'dd/MM/yyyy',\n\t\t{N�mero} as string,\n\t\t{Tipo Comprobante} as string,\n\t\t{Descripci�n} as string,\n\t\t{D�bito} as string,\n\t\t{Cr�dito} as string,\n\t\tDeudor as string,\n\t\tAcreedor as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source4\nMayores, source1, source3, source4 union(byName: true)~> union\nunion select(mapColumn(\n\t\tCuenta,\n\t\t{Nombre Cuenta},\n\t\t{Saldo Anterior Deudor},\n\t\t{Saldo Anterior Acreedor},\n\t\tFecha,\n\t\t{N�mero},\n\t\t{Tipo Comprobante},\n\t\t{Descripci�n},\n\t\t{D�bito},\n\t\t{Cr�dito},\n\t\tDeudor,\n\t\tAcreedor\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Seleccionar1\nSeleccionar1 derive(saldo = toInteger({Cr�dito})-toInteger({D�bito}),\n\t\tidfecha = year(Fecha)*10000+month(Fecha)*100+dayOfWeek(Fecha),\n\t\tNombreTabla = \"ThEERR\") ~> Columnaderivada1\nbusquedacuenta alterRow(insertIf(true())) ~> Modificarfila1\nColumnaderivada1, source2 lookup(Cuenta == Numero,\n\tmultiple: false,\n\tpickup: 'any',\n\tbroadcast: 'auto')~> busquedacuenta\nModificarfila1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tidThEERR as integer,\n\t\tidFecha as integer,\n\t\tidMaestroCuenta as integer,\n\t\tMonto as long,\n\t\tDescripcion as string,\n\t\tNombreTabla as string,\n\t\tCuentaSIN as string\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tpreSQLs:['truncate Table dbo.ThEERR'],\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tidFecha = idfecha,\n\t\tidMaestroCuenta = idCuentas,\n\t\tMonto = saldo,\n\t\tDescripcion = {Descripci�n},\n\t\tNombreTabla,\n\t\tCuentaSIN = Cuenta\n\t)) ~> sink1"
 				}
 			},
 			"dependsOn": [
@@ -1077,52 +1179,6 @@
 				"[concat(variables('factoryId'), '/datasets/VariedadMaestra')]",
 				"[concat(variables('factoryId'), '/datasets/Especies')]",
 				"[concat(variables('factoryId'), '/datasets/DWThHarvest')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/FlowRegistroFertilizante')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"folder": {
-					"name": "PROCESOS"
-				},
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "DLRegistroFertilizante",
-								"type": "DatasetReference"
-							},
-							"name": "source1"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "DWThRegistroFertilizante",
-								"type": "DatasetReference"
-							},
-							"name": "sink1"
-						}
-					],
-					"transformations": [
-						{
-							"name": "Seleccionar1"
-						},
-						{
-							"name": "Columnaderivada1"
-						},
-						{
-							"name": "Modificarfila1"
-						}
-					],
-					"script": "source(output(\n\t\t{odata.etag} as string,\n\t\tItemInternalId as string,\n\t\tID as integer,\n\t\tTitle as string,\n\t\tSistema as ({odata.type} as string, Id as integer, Value as string),\n\t\t{Sistema#Id} as integer,\n\t\tEstanque as ({odata.type} as string, Id as integer, Value as string),\n\t\t{Estanque#Id} as integer,\n\t\tNombreMezcla as ({odata.type} as string, Id as integer, Value as string),\n\t\t{NombreMezcla#Id} as integer,\n\t\tLitrosAplicados as double,\n\t\tFertilizanteAplicado as double,\n\t\tModified as string,\n\t\tCreated as string,\n\t\tAuthor as ({odata.type} as string, Claims as string, DisplayName as string, Email as string, Picture as string, Department as string, JobTitle as string),\n\t\t{Author#Claims} as string,\n\t\tEditor as ({odata.type} as string, Claims as string, DisplayName as string, Email as string, Picture as string, Department as string, JobTitle as string),\n\t\t{Editor#Claims} as string,\n\t\tIdentifier as string,\n\t\tIsFolder as boolean,\n\t\tThumbnail as (Large as string, Medium as string, Small as string),\n\t\tLink1 as string,\n\t\tName as string,\n\t\tFilenameWithExtension as string,\n\t\tPath as string,\n\t\tFullPath as string,\n\t\tHasAttachments as boolean,\n\t\tVersionNumber as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> source1\nsource1 select(mapColumn(\n\t\tFecha = Title,\n\t\tSector = Sistema.Value,\n\t\tEstanque = Estanque.Value,\n\t\tNombreMezcla = NombreMezcla.Value,\n\t\tLitrosAplicadosH = LitrosAplicados,\n\t\tFertilizanteAplicado\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Seleccionar1\nSeleccionar1 derive(idFecha = toInteger(right(Fecha,4))*10000+toInteger(right(left(Fecha,5),2))*100+toInteger(left(Fecha,2))) ~> Columnaderivada1\nColumnaderivada1 alterRow(insertIf(true())) ~> Modificarfila1\nModificarfila1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tidFertilizanteRegistro as integer,\n\t\tidFecha as integer,\n\t\tSector as string,\n\t\tEstanque as string,\n\t\tMezcla as string,\n\t\tTasaAplicada as double,\n\t\tFertilizantAplicado as double\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tpreSQLs:['truncate table dbo.ThFertilizanteRegistro'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tidFecha,\n\t\tSector,\n\t\tEstanque,\n\t\tMezcla = NombreMezcla,\n\t\tTasaAplicada = LitrosAplicadosH,\n\t\tFertilizantAplicado = FertilizanteAplicado\n\t)) ~> sink1"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/DWThRegistroFertilizante')]"
 			]
 		}
 	]
