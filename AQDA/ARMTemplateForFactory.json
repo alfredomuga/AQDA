@@ -532,15 +532,13 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataflow": {
-								"referenceName": "EERR",
+								"referenceName": "FlowRiego",
 								"type": "DataFlowReference",
 								"parameters": {},
 								"datasetParameters": {
-									"Mayores": {},
 									"source1": {},
 									"source2": {},
 									"source3": {},
-									"source4": {},
 									"sink1": {}
 								}
 							},
@@ -560,7 +558,7 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/EERR')]"
+				"[concat(variables('factoryId'), '/dataflows/FlowRiego')]"
 			]
 		},
 		{
@@ -1974,6 +1972,106 @@
 					"location": {
 						"type": "AzureBlobFSLocation",
 						"fileName": "Riego2020.csv",
+						"fileSystem": "tablasauxiliares"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "ï»¿\"Nombre\"",
+						"type": "String"
+					},
+					{
+						"name": "F. Ini",
+						"type": "String"
+					},
+					{
+						"name": "F. Ter",
+						"type": "String"
+					},
+					{
+						"name": "m3 Real",
+						"type": "String"
+					},
+					{
+						"name": "m3 Prg",
+						"type": "String"
+					},
+					{
+						"name": "mm Real",
+						"type": "String"
+					},
+					{
+						"name": "mm Prg",
+						"type": "String"
+					},
+					{
+						"name": "T. Oper",
+						"type": "String"
+					},
+					{
+						"name": "Huerto",
+						"type": "String"
+					},
+					{
+						"name": "Sectores",
+						"type": "String"
+					},
+					{
+						"name": "Fertirrigado",
+						"type": "String"
+					},
+					{
+						"name": "cc1",
+						"type": "String"
+					},
+					{
+						"name": "cc2",
+						"type": "String"
+					},
+					{
+						"name": "cc3",
+						"type": "String"
+					},
+					{
+						"name": "cc4",
+						"type": "String"
+					},
+					{
+						"name": "cc5",
+						"type": "String"
+					},
+					{
+						"name": "cc6",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DLRiego2021')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DataLake/DLPROCESOS"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "Riego2021.csv",
 						"fileSystem": "tablasauxiliares"
 					},
 					"columnDelimiter": ",",
@@ -3606,106 +3704,6 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/DLWeather')]",
 				"[concat(variables('factoryId'), '/datasets/DWThweather')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DLRiego2021')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureDataLakeStorage1",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "DataLake/DLPROCESOS"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": "Riego2021.csv",
-						"fileSystem": "tablasauxiliares"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": [
-					{
-						"name": "ï»¿\"Nombre\"",
-						"type": "String"
-					},
-					{
-						"name": "F. Ini",
-						"type": "String"
-					},
-					{
-						"name": "F. Ter",
-						"type": "String"
-					},
-					{
-						"name": "m3 Real",
-						"type": "String"
-					},
-					{
-						"name": "m3 Prg",
-						"type": "String"
-					},
-					{
-						"name": "mm Real",
-						"type": "String"
-					},
-					{
-						"name": "mm Prg",
-						"type": "String"
-					},
-					{
-						"name": "T. Oper",
-						"type": "String"
-					},
-					{
-						"name": "Huerto",
-						"type": "String"
-					},
-					{
-						"name": "Sectores",
-						"type": "String"
-					},
-					{
-						"name": "Fertirrigado",
-						"type": "String"
-					},
-					{
-						"name": "cc1",
-						"type": "String"
-					},
-					{
-						"name": "cc2",
-						"type": "String"
-					},
-					{
-						"name": "cc3",
-						"type": "String"
-					},
-					{
-						"name": "cc4",
-						"type": "String"
-					},
-					{
-						"name": "cc5",
-						"type": "String"
-					},
-					{
-						"name": "cc6",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
 			]
 		}
 	]

@@ -588,15 +588,13 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataflow": {
-								"referenceName": "EERR",
+								"referenceName": "FlowRiego",
 								"type": "DataFlowReference",
 								"parameters": {},
 								"datasetParameters": {
-									"Mayores": {},
 									"source1": {},
 									"source2": {},
 									"source3": {},
-									"source4": {},
 									"sink1": {}
 								}
 							},
@@ -615,7 +613,9 @@
 				},
 				"annotations": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/FlowRiego')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/Consolidado Flujo')]",
