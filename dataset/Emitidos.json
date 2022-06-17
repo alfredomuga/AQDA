@@ -24,7 +24,11 @@
 		"typeProperties": {
 			"location": {
 				"type": "HttpServerLocation",
-				"relativeUrl": "https://caoba.docele.cl/cl-dol/DTEService"
+				"relativeUrl": "https://caoba.docele.cl:443/cl-dol/DTEService"
+			},
+			"compression": {
+				"type": "bzip2",
+				"level": "Optimal"
 			}
 		}
 	}
