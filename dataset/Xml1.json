@@ -1,0 +1,30 @@
+{
+	"name": "Xml1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "HttpFaceleEmitidos",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"rutAbonado": {
+				"type": "string",
+				"defaultValue": "76001565-2"
+			},
+			"userMail": {
+				"type": "string",
+				"defaultValue": "amugai@santotomas.cl"
+			},
+			"operacion": {
+				"type": "string",
+				"defaultValue": "EMISION"
+			}
+		},
+		"annotations": [],
+		"type": "Xml",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation"
+			}
+		}
+	}
+}
