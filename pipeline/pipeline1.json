@@ -17,6 +17,10 @@
 				"typeProperties": {
 					"url": "https://caoba.docele.cl/cl-dol/DTEService",
 					"method": "POST",
+					"headers": {
+						"facele.user": "0cc713a13",
+						"facele.pass": "mWUX8WQOfuexV9CLWaNFSA=="
+					},
 					"body": "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:dte=\"http://facele.cl/docele/servicios/DTE/\">\n   <soapenv:Header/>\n   <soapenv:Body>\n      <dte:consultar>\n         <rutAbonado>76001565-2</rutAbonado>\n         <userMail>amugai@santotomas.cl</userMail>\n         <operacion>EMISION</operacion>\n      </dte:consultar>\n   </soapenv:Body>\n</soapenv:Envelope>",
 					"authentication": {
 						"type": "MSI"
