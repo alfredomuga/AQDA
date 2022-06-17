@@ -1,0 +1,23 @@
+{
+	"name": "HttpFaceleEmitidos",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "HttpServer",
+		"typeProperties": {
+			"url": "https://caoba.docele.cl/cl-dol/DTEService?wsdl",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "Anonymous",
+			"authHeaders": {
+				"facele.user": {
+					"type": "SecureString",
+					"value": "**********"
+				},
+				"facele.pass": {
+					"type": "SecureString",
+					"value": "**********"
+				}
+			}
+		}
+	}
+}
